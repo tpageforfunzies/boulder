@@ -1,20 +1,24 @@
+// Entry to app
 package main
+
 import (
-  "net/http"
-  "github.com/gin-gonic/gin"
+  "fmt"
+  "github.com/tpageforfunzies/boulder/pkg/boulder"
 )
 func main() {
   // Set the router as the default one shipped with Gin
-  router := gin.Default()
+  router := boulder.GetRouter()
+
   // Setup route group for the API
-  api := router.Group("/v1")
-  {
-    api.GET("/", func(c *gin.Context) {
-      c.JSON(http.StatusOK, gin.H {
-        "message": "derp",
-      })
-    })
+  api := router.Group("/v1/")
+
+  // Add routes to route group
+  boulder.AddRoutes(api)
+
+  // Start and run the router
+  err := router.Run(":1337")
+
+  if err != nil {
+    fmt.Println("something broke my dude")
   }
-  // Start and run the server
-  router.Run(":1337")
 }
