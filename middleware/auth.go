@@ -1,5 +1,5 @@
 // auth.go
-package boulder
+package middleware
 
 import (
 	"net/http"
