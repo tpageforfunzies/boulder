@@ -3,9 +3,9 @@ package boulder
 
 import (
 	"net/http"
-	u "github.com/tpageforfunzies/boulder/pkg/boulder/common"
+	u "github.com/tpageforfunzies/boulder/common"
 	"strings"
-	"github.com/tpageforfunzies/boulder/pkg/boulder/models"
+	"github.com/tpageforfunzies/boulder/models"
 	jwt "github.com/dgrijalva/jwt-go"
 	"os"
 	"context"

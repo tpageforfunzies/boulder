@@ -3,8 +3,8 @@ package handlers
 
 import (
 	"net/http"
-	u "github.com/tpageforfunzies/boulder/pkg/boulder/common"
-	"github.com/tpageforfunzies/boulder/pkg/boulder/models"
+	u "github.com/tpageforfunzies/boulder/common"
+	"github.com/tpageforfunzies/boulder/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 )

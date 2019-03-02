@@ -2,7 +2,7 @@
 package boulder
 
 import (
-	"github.com/tpageforfunzies/boulder/pkg/boulder/handlers"
+	"github.com/tpageforfunzies/boulder/handlers"
 	"github.com/gin-gonic/gin"
 	"sync"
 )

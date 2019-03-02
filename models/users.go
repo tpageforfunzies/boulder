@@ -3,7 +3,7 @@ package models
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	u "github.com/tpageforfunzies/boulder/pkg/boulder/common"
+	u "github.com/tpageforfunzies/boulder/common"
 	"strings"
 	"github.com/jinzhu/gorm"
 	"os"

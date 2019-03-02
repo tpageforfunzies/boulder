@@ -3,8 +3,8 @@ package main
 
 import (
   "fmt"
-  "github.com/tpageforfunzies/boulder/pkg/boulder"
-  "github.com/tpageforfunzies/boulder/pkg/boulder/models"
+  "github.com/tpageforfunzies/boulder"
+  "github.com/tpageforfunzies/boulder/models"
 )
 func main() {
   // Load up environmental variables
