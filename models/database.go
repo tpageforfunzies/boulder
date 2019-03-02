@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -40,9 +40,10 @@ func createDatabaseConnection() {
 		databasePassword,
 	)
 
-	if databaseType == "sqlite3" {
-		connectionString = "./database/boulder.db"
-	}
+	// commented out currently because it hates windows
+	// if databaseType == "sqlite3" {
+	// 	connectionString = "./database/boulder.db"
+	// }
 
 
 
