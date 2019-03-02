@@ -1,3 +1,4 @@
+// routes.go
 // Routes stuff here
 package boulder
 
@@ -24,4 +25,6 @@ func AddRoutes(group *gin.RouterGroup) {
 	group.GET("/", homeHandler)
 	group.POST("/user/new", handlers.CreateUser)
 	group.POST("/user/login", handlers.Authenticate)
+	group.POST("/route/new", handlers.CreateRoute)
+	group.GET("/routes/:user_id", handlers.GetRoutesFor)
 }

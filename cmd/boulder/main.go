@@ -1,3 +1,4 @@
+// main.go
 // Entry to app
 package main
 

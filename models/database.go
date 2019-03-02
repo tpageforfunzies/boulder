@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	// don't turn this back on until you have gcc in your path
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/joho/godotenv"
 	"log"
@@ -45,13 +46,11 @@ func createDatabaseConnection() {
 	// 	connectionString = "./database/boulder.db"
 	// }
 
-
-
 	db, err = gorm.Open(databaseType, connectionString)
 	if err != nil {
 		log.Fatalf("Got error when connect database, the error is '%v'", err)
 	}
-	db.Debug().AutoMigrate(&User{})
+	db.Debug().AutoMigrate(&User{}, &Route{})
 }
 
 // Return singleton database connection
