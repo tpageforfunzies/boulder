@@ -6,9 +6,5 @@ go:
 env:
   - GO111MODULE=on
 
-install:
-  - go get -u github.com/golang/dep/...
-
 script:
-- make setup
-- make basic
+- make build

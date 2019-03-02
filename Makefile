@@ -6,6 +6,9 @@ else
 endif
 	dep ensure
 
+build:
+	go build -o app ./cmd/boulder
+
 basic:
 	go build -o app ./cmd/boulder
 	./app
