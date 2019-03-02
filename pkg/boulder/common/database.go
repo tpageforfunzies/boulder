@@ -6,10 +6,11 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/jinzhu/gorm"
   	_ "github.com/jinzhu/gorm/dialects/postgres"
-  	"sync"
+  	"os"
 )
 
 var db *gorm.DB
+var err error
 
 // Automatically loads from 
 func LoadEnvironment() {
@@ -27,18 +28,17 @@ func createDatabaseConnection() {
 	databaseUser := os.Getenv("DATABASE_USER")
 	databasePassword := os.Getenv("DATABASE_PASSWORD")
 
-	db = gorm.Open(databaseType, 
+	db, err = gorm.Open(databaseType, 
 		fmt.Sprintf(
 			"host=%s port=%s user=%s dbname=%s password=%s",
 			databaseHost,
 			databasePort,
 			databaseUser,
 			databaseName,
-			databasePassword
-		)
+			databasePassword,
+		),
 	)
-
-	return db
+	defer db.Close()
 }
 
 // Return singleton database connection
@@ -48,5 +48,6 @@ func GetDBConnection() *gorm.DB {
 		return db
 	}
 
-	return createDatabaseConnection()
+	createDatabaseConnection()
+	return db
 }
