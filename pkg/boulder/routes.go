@@ -2,6 +2,7 @@
 package boulder
 
 import (
+	"github.com/tpageforfunzies/boulder/pkg/boulder/handlers"
 	"github.com/gin-gonic/gin"
 	"sync"
 )
@@ -21,4 +22,5 @@ func GetRouter() *gin.Engine {
 
 func AddRoutes(group *gin.RouterGroup) {
 	group.GET("/", homeHandler)
+	group.POST("/user/new", handlers.CreateUser)
 }

@@ -3,6 +3,7 @@ package common
 import (
 	"encoding/json"
 	"net/http"
+	// "github.com/gin-gonic/gin"
 )
 
 func Message(status bool, message string) (map[string]interface{}) {

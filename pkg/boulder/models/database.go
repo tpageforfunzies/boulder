@@ -1,5 +1,5 @@
 // database.go
-package common
+package models
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
   	_ "github.com/jinzhu/gorm/dialects/postgres"
   	"os"
+  	"log"
 )
 
 var db *gorm.DB
@@ -30,7 +31,7 @@ func createDatabaseConnection() {
 
 	db, err = gorm.Open(databaseType, 
 		fmt.Sprintf(
-			"host=%s port=%s user=%s dbname=%s password=%s",
+			"host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
 			databaseHost,
 			databasePort,
 			databaseUser,
@@ -38,12 +39,14 @@ func createDatabaseConnection() {
 			databasePassword,
 		),
 	)
+	if err != nil {
+		log.Fatalf("Got error when connect database, the error is '%v'", err)
+	}
 	db.Debug().AutoMigrate(&User{})
-	defer db.Close()
 }
 
 // Return singleton database connection
-func GetDBConnection() *gorm.DB {
+func GetDB() *gorm.DB {
 
 	if db != nil {
 		return db
