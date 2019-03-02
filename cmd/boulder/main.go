@@ -20,5 +20,6 @@ func main() {
 
   if err != nil {
     fmt.Println("something broke my dude")
+    fmt.Println(err)
   }
 }
