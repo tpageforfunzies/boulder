@@ -38,6 +38,7 @@ func createDatabaseConnection() {
 			databasePassword,
 		),
 	)
+	db.Debug().AutoMigrate(&User{})
 	defer db.Close()
 }
 

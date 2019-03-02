@@ -1,2 +1,0 @@
-// accounts.go
-package models
