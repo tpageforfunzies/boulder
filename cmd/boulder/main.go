@@ -4,8 +4,12 @@ package main
 import (
   "fmt"
   "github.com/tpageforfunzies/boulder/pkg/boulder"
+  "github.com/tpageforfunzies/boulder/pkg/boulder/common"
 )
 func main() {
+  // Load up environmental variables
+  common.LoadEnvironment()
+
   // Set the router as the default one shipped with Gin
   router := boulder.GetRouter()
 
