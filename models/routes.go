@@ -24,7 +24,7 @@ func (route *Route) Validate() (map[string] interface{}, bool) {
 		return u.Message(false, "your route needs a grade my doodie"), false
 	}
 
-	if route.UserId <= 0 {
+	if route.UserId == 0 {
 		return u.Message(false, "User not recognized"), false
 	}
 

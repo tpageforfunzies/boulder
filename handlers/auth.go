@@ -6,7 +6,15 @@ import (
 	"github.com/tpageforfunzies/boulder/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
+
+func HomeHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H {
+         "message": "derp",
+       },
+	)
+}
 
 
 func CreateUser(c *gin.Context) {

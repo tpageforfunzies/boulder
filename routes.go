@@ -22,7 +22,7 @@ func GetRouter() *gin.Engine {
 }
 
 func AddRoutes(group *gin.RouterGroup) {
-	group.GET("/", homeHandler)
+	group.GET("/", handlers.HomeHandler)
 	group.POST("/user/new", handlers.CreateUser)
 	group.POST("/user/login", handlers.Authenticate)
 	group.POST("/route/new", handlers.CreateRoute)
