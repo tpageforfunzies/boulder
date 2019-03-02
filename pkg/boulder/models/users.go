@@ -129,5 +129,3 @@ func GetUser(u uint) *User {
 	usr.Password = ""
 	return usr
 }
-
-// {"name": "taylor","email": "test@test.com","password": "p@55w0rd!"}
