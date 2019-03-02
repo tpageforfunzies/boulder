@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"net/http"
 	u "github.com/tpageforfunzies/boulder/common"
 	"github.com/tpageforfunzies/boulder/models"
 	"encoding/json"
@@ -12,34 +11,28 @@ import (
 
 func CreateUser(c *gin.Context) {
 
-	db := models.GetDB()
-	defer db.Close()
-
-	r := c.Request
-	w := c.Writer
-
 	user := &models.User{}
 	// throw this bitch up in that object
-	err := json.NewDecoder(r.Body).Decode(user)
+	err := json.NewDecoder(c.Request.Body).Decode(user)
 	if err != nil {
-		u.Respond(w, u.Message(false, "went wrong in handler"))
+		u.Respond(c.Writer, u.Message(false, "went wrong in handler"))
 		return
 	}
 
 	// active record all day baby
 	resp := user.Create()
-	u.Respond(w, resp)
+	u.Respond(c.Writer, resp)
 }
 
-var Authenticate = func(w http.ResponseWriter, r *http.Request) {
+func Authenticate(c *gin.Context) {
 
 	user := &models.User{}
-	err := json.NewDecoder(r.Body).Decode(user)
+	err := json.NewDecoder(c.Request.Body).Decode(user)
 	if err != nil {
-		u.Respond(w, u.Message(false, "went wrong in handler"))
+		u.Respond(c.Writer, u.Message(false, "went wrong in handler"))
 		return
 	}
 
 	resp := models.Login(user.Email, user.Password)
-	u.Respond(w, resp)
+	u.Respond(c.Writer, resp)
 }
