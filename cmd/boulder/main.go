@@ -16,7 +16,7 @@ func main() {
   boulder.AddRoutes(api)
 
   // Start and run the router
-  err := router.Run(":1337")
+  err := router.Run(":420")
 
   if err != nil {
     fmt.Println("something broke my dude")
