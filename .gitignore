@@ -20,3 +20,4 @@ _test
 _testmain.go
 app
 .env
+*.db
