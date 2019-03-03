@@ -6,6 +6,7 @@ import (
   "fmt"
   "github.com/tpageforfunzies/boulder"
   "github.com/tpageforfunzies/boulder/models"
+  "github.com/tpageforfunzies/boulder/middleware"
 )
 func main() {
   // Load up environmental variables
@@ -16,12 +17,14 @@ func main() {
 
   // Set the router as the default one shipped with Gin
   router := boulder.GetRouter()
+  router.Use(middleware.JwtAuthentication)
 
   // Setup route group for the API
   api := router.Group("/v1/")
 
   // Add routes to route group
   boulder.AddRoutes(api)
+
 
   // Start and run the router
   err := router.Run(":80")

@@ -37,5 +37,4 @@ func GetRoutesFor(c *gin.Context) {
 	resp := u.Message(true, "success")
 	resp["data"] = data
 	u.Respond(c.Writer, resp)
-
 }
