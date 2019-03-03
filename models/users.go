@@ -22,7 +22,7 @@ type User struct {
 	Name string `json:"name"`
 	Email string `json:"email"`
 	Password string `json:"password"`
-	Token string `json:"token";sql:"-"`
+	Token string `json:"token" sql:"-"`
 }
 
 //Validate incoming user details
@@ -71,7 +71,7 @@ func (user *User) Create() (map[string] interface{}) {
 	GetDB().Create(user)
 
 	// should have an id now
-	if user.ID <= 0 {
+	if user.ID == 0 {
 		return u.Message(false, "don't have an ID")
 	}
 

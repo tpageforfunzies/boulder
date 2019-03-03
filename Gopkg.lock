@@ -39,12 +39,11 @@
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:af20574f4a85d55078bae1840d00e6c1af65d18e8ae0ad5e199b03bd18902cd5"
+  digest = "1:7e63b12cdd7bef2c411d736cb67e28134d39f5d236aa1bfb8f3d55e3ad709eca"
   name = "github.com/jinzhu/gorm"
   packages = [
     ".",
     "dialects/postgres",
-    "dialects/sqlite",
   ]
   pruneopts = "UT"
   revision = "472c70caa40267cb89fd8facb07fe6454b578626"
@@ -93,14 +92,6 @@
   pruneopts = "UT"
   revision = "369ecd8cea9851e459abb67eb171853e3986591e"
   version = "v0.0.6"
-
-[[projects]]
-  digest = "1:4a49346ca45376a2bba679ca0e83bec949d780d4e927931317904bad482943ec"
-  name = "github.com/mattn/go-sqlite3"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "c7c4067b79cc51e6dfdcef5c702e74b1e0fa7c75"
-  version = "v1.10.0"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -169,7 +160,6 @@
     "github.com/gin-gonic/gin",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
-    "github.com/jinzhu/gorm/dialects/sqlite",
     "github.com/joho/godotenv",
     "golang.org/x/crypto/bcrypt",
   ]

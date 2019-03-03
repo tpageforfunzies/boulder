@@ -9,7 +9,6 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"os"
 	"context"
-	"fmt"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
@@ -28,11 +27,10 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			}
 		}
 
-		response := make(map[string] interface{})
 		tokenHeader := r.Header.Get("Authorization") // Grab the token from the header
 
 		if tokenHeader == "" { // Token is missing, returns with error code 403 Unauthorized
-			response = u.Message(false, "Missing auth token")
+			response := u.Message(false, "Missing auth token")
 			w.WriteHeader(http.StatusForbidden)
 			w.Header().Add("Content-Type", "application/json")
 			u.Respond(w, response)
@@ -41,7 +39,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 
 		splitted := strings.Split(tokenHeader, " ") // The token normally comes in format `Bearer {token-body}`
 		if len(splitted) != 2 {
-			response = u.Message(false, "Invalid/Malformed auth token")
+			response := u.Message(false, "Invalid/Malformed auth token")
 			w.WriteHeader(http.StatusForbidden)
 			w.Header().Add("Content-Type", "application/json")
 			u.Respond(w, response)
@@ -56,7 +54,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		})
 
 		if err != nil { // Malformed token, returns with http code 403
-			response = u.Message(false, "Malformed authentication token")
+			response := u.Message(false, "Malformed authentication token")
 			w.WriteHeader(http.StatusForbidden)
 			w.Header().Add("Content-Type", "application/json")
 			u.Respond(w, response)
@@ -64,7 +62,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		if !token.Valid { // you played yourself
-			response = u.Message(false, "Token is not valid.")
+			response := u.Message(false, "Token is not valid.")
 			w.WriteHeader(http.StatusForbidden)
 			w.Header().Add("Content-Type", "application/json")
 			u.Respond(w, response)
@@ -72,7 +70,6 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		}
 
 		// Everything went well, proceed with the request and set the caller to the user retrieved from the parsed token
-		fmt.Sprintf("User %s", tk.UserId) // monitoring
 		ctx := context.WithValue(r.Context(), "user", tk.UserId)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r) // proceed in the middleware chain
