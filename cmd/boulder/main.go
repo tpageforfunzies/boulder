@@ -28,7 +28,6 @@ func main() {
   // Add routes to route group
   boulder.AddRoutes(api)
 
-
   // Start and run the router
   err := router.Run(":80")
 
