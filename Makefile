@@ -11,4 +11,4 @@ build:
 
 basic:
 	go build -o app ./cmd/boulder
-	./app
+	sudo ./app

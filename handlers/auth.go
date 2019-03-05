@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	// "fmt"
 )
 
 func HomeHandler(c *gin.Context) {
@@ -29,7 +30,13 @@ func CreateUser(c *gin.Context) {
 
 	// active record all day baby
 	resp := user.Create()
-	u.Respond(c.Writer, resp)
+
+	if resp["status"] == false {
+		c.JSON(http.StatusForbidden, resp)
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+	return
 }
 
 func Authenticate(c *gin.Context) {
@@ -42,5 +49,10 @@ func Authenticate(c *gin.Context) {
 	}
 
 	resp := models.Login(user.Email, user.Password)
-	u.Respond(c.Writer, resp)
+	if resp["status"] == false {
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+	return
 }
