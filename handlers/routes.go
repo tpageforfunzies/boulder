@@ -31,6 +31,26 @@ func CreateRoute(c *gin.Context) {
 	return
 }
 
+func GetRoute(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		return
+	}
+
+	route := models.GetRoute(id)
+	if route == nil {
+		resp := u.Message(false, "could not find route")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+	resp := u.Message(true, "success")
+	resp["data"] = route
+	c.JSON(http.StatusOK, resp)
+	return
+
+}
+
 func GetRoutesFor(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("user_id"))
