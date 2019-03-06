@@ -6,6 +6,7 @@ import (
 	"github.com/tpageforfunzies/boulder/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strconv"
 )
 
@@ -22,7 +23,12 @@ func CreateRoute(c *gin.Context) {
 
 	// active record all day baby
 	resp := route.Create()
-	u.Respond(c.Writer, resp)
+	if !resp["status"].(bool) {
+		c.JSON(http.StatusForbidden, resp)
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+	return
 }
 
 func GetRoutesFor(c *gin.Context) {
@@ -34,7 +40,13 @@ func GetRoutesFor(c *gin.Context) {
 	}
 
 	data := models.GetRoutes(id)
+	if data == nil {
+		resp := u.Message(false, "could not find routes")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
 	resp := u.Message(true, "success")
 	resp["data"] = data
-	u.Respond(c.Writer, resp)
+	c.JSON(http.StatusOK, resp)
+	return
 }

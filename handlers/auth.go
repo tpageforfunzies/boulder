@@ -31,7 +31,7 @@ func CreateUser(c *gin.Context) {
 	// active record all day baby
 	resp := user.Create()
 
-	if resp["status"] == false {
+	if !resp["status"].(bool) {
 		c.JSON(http.StatusForbidden, resp)
 		return
 	}
@@ -49,7 +49,7 @@ func Authenticate(c *gin.Context) {
 	}
 
 	resp := models.Login(user.Email, user.Password)
-	if resp["status"] == false {
+	if !resp["status"].(bool) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
