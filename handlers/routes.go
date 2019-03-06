@@ -40,7 +40,7 @@ func GetRoutesFor(c *gin.Context) {
 	}
 
 	data := models.GetRoutes(id)
-	if data == nil {
+	if len(data) == 0 {
 		resp := u.Message(false, "could not find routes")
 		c.JSON(http.StatusNotFound, resp)
 		return
