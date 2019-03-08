@@ -51,8 +51,8 @@ func UpdateRoute(route *models.Route) (map[string] interface{}) {
 }
 
 func DeleteRoute(id int) bool {
-	err := GetDB().Delete(&models.Route{}, id).Error
-	return err == nil
+	damage := GetDB().Delete(&models.Route{}, id).RowsAffected
+	return damage == 1
 }
 
 func GetRoute(id int) (*models.Route) {
