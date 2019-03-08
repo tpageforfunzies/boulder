@@ -1,5 +1,5 @@
 // database.go
-package models
+package services
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 	// don't turn this back on until you have gcc in your path
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/joho/godotenv"
+	"github.com/tpageforfunzies/boulder/models"
 	"log"
 	"os"
 )
@@ -50,7 +51,7 @@ func createDatabaseConnection() {
 	if err != nil {
 		log.Fatalf("Got error when connect database, the error is '%v'", err)
 	}
-	db.Debug().AutoMigrate(&User{}, &Route{})
+	db.Debug().AutoMigrate(&models.User{}, &models.Route{})
 }
 
 // Return singleton database connection

@@ -4,6 +4,7 @@ package handlers
 import (
 	u "github.com/tpageforfunzies/boulder/common"
 	"github.com/tpageforfunzies/boulder/models"
+	"github.com/tpageforfunzies/boulder/services"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -21,8 +22,7 @@ func CreateRoute(c *gin.Context) {
 		return
 	}
 
-	// active record all day baby
-	resp := route.Create()
+	resp := services.CreateRoute(route)
 	if !resp["status"].(bool) {
 		c.JSON(http.StatusForbidden, resp)
 		return
@@ -38,7 +38,7 @@ func GetRoute(c *gin.Context) {
 		return
 	}
 
-	route := models.GetRoute(id)
+	route := services.GetRoute(id)
 	if route == nil {
 		resp := u.Message(false, "could not find route")
 		c.JSON(http.StatusNotFound, resp)
@@ -51,7 +51,7 @@ func GetRoute(c *gin.Context) {
 
 }
 
-func GetRoutesFor(c *gin.Context) {
+func GetRoutesForUser(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("user_id"))
 	if err != nil {
@@ -59,7 +59,7 @@ func GetRoutesFor(c *gin.Context) {
 		return
 	}
 
-	data := models.GetRoutes(id)
+	data := services.GetRoutesByUserId(id)
 	if len(data) == 0 {
 		resp := u.Message(false, "could not find routes")
 		c.JSON(http.StatusNotFound, resp)

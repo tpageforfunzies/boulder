@@ -23,9 +23,13 @@ func GetRouter() *gin.Engine {
 
 func AddRoutes(group *gin.RouterGroup) {
 	group.GET("/", handlers.HomeHandler)
+
+	// User routes
 	group.POST("/user/new", handlers.CreateUser)
 	group.POST("/user/login", handlers.Authenticate)
+
+	// Route routes
 	group.POST("/route/new", handlers.CreateRoute)
 	group.GET("/route/:id", handlers.GetRoute)
-	group.GET("/routes/:user_id", handlers.GetRoutesFor)
+	group.GET("/routes/:user_id", handlers.GetRoutesForUser)
 }

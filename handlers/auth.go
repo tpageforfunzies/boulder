@@ -4,6 +4,7 @@ package handlers
 import (
 	u "github.com/tpageforfunzies/boulder/common"
 	"github.com/tpageforfunzies/boulder/models"
+	"github.com/tpageforfunzies/boulder/services"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -28,8 +29,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	// active record all day baby
-	resp := user.Create()
+	resp := services.CreateUser(user)
 
 	if !resp["status"].(bool) {
 		c.JSON(http.StatusForbidden, resp)
@@ -48,7 +48,7 @@ func Authenticate(c *gin.Context) {
 		return
 	}
 
-	resp := models.Login(user.Email, user.Password)
+	resp := services.Login(user.Email, user.Password)
 	if !resp["status"].(bool) {
 		c.JSON(http.StatusBadRequest, resp)
 		return

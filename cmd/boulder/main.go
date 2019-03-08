@@ -5,14 +5,14 @@ package main
 import (
   "fmt"
   "github.com/tpageforfunzies/boulder"
-  "github.com/tpageforfunzies/boulder/models"
+  "github.com/tpageforfunzies/boulder/services"
   "github.com/tpageforfunzies/boulder/middleware"
 )
 func main() {
   // Load up environmental variables
-  models.LoadEnvironment()
+  services.LoadEnvironment()
 
-  db := models.GetDB()
+  db := services.GetDB()
   defer db.Close()
 
   // Set the router as the default one shipped with Gin
