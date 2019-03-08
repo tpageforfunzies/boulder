@@ -50,6 +50,11 @@ func UpdateRoute(route *models.Route) (map[string] interface{}) {
 	return resp
 }
 
+func DeleteRoute(id int) bool {
+	err := GetDB().Delete(&models.Route{}, id).Error
+	return err == nil
+}
+
 func GetRoute(id int) (*models.Route) {
 	route := &models.Route{}
 	err := GetDB().Table("routes").Where("id = ?", id).First(route).Error

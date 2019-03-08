@@ -32,6 +32,7 @@ func AddRoutes(group *gin.RouterGroup) {
 	group.POST("/route/new", handlers.CreateRoute)
 	group.GET("/route/:id", handlers.GetRoute)
 	group.PUT("/route/:id", handlers.UpdateRoute)
+	group.DELETE("/route/:id", handlers.DeleteRoute)
 	group.GET("/routes/all/", handlers.GetRoutes)
 	group.GET("/routes/all/:user_id", handlers.GetRoutesForUser)
 }

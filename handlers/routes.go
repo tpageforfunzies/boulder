@@ -44,7 +44,25 @@ func UpdateRoute(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, resp)
 	return
+}
 
+func DeleteRoute(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		return
+	}
+
+	ok := services.DeleteRoute(id)
+	if !ok {
+		resp := u.Message(false, "could not delete route")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+	
+	resp := u.Message(true, "success")
+	c.JSON(http.StatusOK, resp)
+	return
 }
 
 func GetRoute(c *gin.Context) {
@@ -64,7 +82,6 @@ func GetRoute(c *gin.Context) {
 	resp["route"] = route
 	c.JSON(http.StatusOK, resp)
 	return
-
 }
 
 func GetRoutesForUser(c *gin.Context) {
