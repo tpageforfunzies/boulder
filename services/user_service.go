@@ -41,6 +41,10 @@ func ValidateUser(user *models.User) (map[string] interface{}, bool) {
 	return u.Message(false, "i believe you"), true
 }
 
+// func UpdateUser(user *models.User) (map[string] interface{}) {
+	
+// }
+
 func CreateUser(user *models.User) (map[string] interface{}) {
 
 	// make sure they're not in db already

@@ -2,43 +2,51 @@
 package services
 
 import (
-	u "github.com/tpageforfunzies/boulder/common"
 	"github.com/tpageforfunzies/boulder/models"
 )
 
-func ValidateRoute(route *models.Route) (map[string] interface{}, bool) {
+func ValidateRoute(route *models.Route) bool {
 
 	if route.Name == "" {
-		return u.Message(false, "your route needs a name brah"), false
+		return false
 	}
 
 	if route.Grade == "" {
-		return u.Message(false, "your route needs a grade my doodie"), false
+		return false
 	}
 
 	if route.UserId == 0 {
-		return u.Message(false, "User not recognized"), false
+		return false
 	}
 
-	return u.Message(true, "success"), true
+	return true
 }
 
-func CreateRoute(route *models.Route) (map[string] interface{}) {
+func CreateRoute(route *models.Route) bool {
 
-	check, ok := ValidateRoute(route)
+	ok := ValidateRoute(route)
 	if !ok {
-		return check
+		return false
 	}
 
-	GetDB().Create(route)
+	return GetDB().Create(route).RowsAffected == 1
+}
 
-	resp := u.Message(true, "success")
-	resp["route"] = route
-	return resp
+func UpdateRoute(route *models.Route) bool {
+	ok := ValidateRoute(route)
+	if !ok {
+		return false
+	}
+
+	return GetDB().Model(&route).Updates(&route).RowsAffected == 1
+}
+
+func DeleteRoute(id int) bool {
+	damage := GetDB().Delete(&models.Route{}, id).RowsAffected
+	return damage == 1
 }
 
 func GetRoute(id int) (*models.Route) {
-
 	route := &models.Route{}
 	err := GetDB().Table("routes").Where("id = ?", id).First(route).Error
 	if err != nil {
@@ -47,8 +55,16 @@ func GetRoute(id int) (*models.Route) {
 	return route
 }
 
-func GetRoutesByUserId(userId int) ([]*models.Route) {
+func GetAllRoutes() ([]*models.Route) {
+	routes := make([]*models.Route, 0)
+	err := GetDB().Find(&routes).Error
+	if err != nil {
+		return nil
+	}
+	return routes
+}
 
+func GetRoutesByUserId(userId int) ([]*models.Route) {
 	routes := make([]*models.Route, 0)
 	err := GetDB().Table("routes").Where("user_id = ?", userId).Find(&routes).Error
 	if err != nil {
