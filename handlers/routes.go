@@ -20,11 +20,14 @@ func CreateRoute(c *gin.Context) {
 		return
 	}
 
-	resp := services.CreateRoute(route)
-	if !resp["status"].(bool) {
-		c.JSON(http.StatusForbidden, resp)
+	ok := services.CreateRoute(route)
+	if !ok {
+		resp := u.Message(false, "could not create route")
+		c.JSON(http.StatusNotFound, resp)
 		return
 	}
+	resp := u.Message(true, "success")
+	resp["route"] = route
 	c.JSON(http.StatusOK, resp)
 	return
 }
@@ -37,11 +40,14 @@ func UpdateRoute(c *gin.Context) {
 		return
 	}
 
-	resp := services.UpdateRoute(route)
-	if !resp["status"].(bool) {
-		c.JSON(http.StatusForbidden, resp)
+	ok := services.UpdateRoute(route)
+	if !ok {
+		resp := u.Message(false, "could not update route")
+		c.JSON(http.StatusNotFound, resp)
 		return
 	}
+	resp := u.Message(true, "success")
+	resp["route"] = route
 	c.JSON(http.StatusOK, resp)
 	return
 }
@@ -59,7 +65,7 @@ func DeleteRoute(c *gin.Context) {
 		c.JSON(http.StatusNotFound, resp)
 		return
 	}
-	
+
 	resp := u.Message(true, "success")
 	c.JSON(http.StatusOK, resp)
 	return

@@ -2,52 +2,43 @@
 package services
 
 import (
-	u "github.com/tpageforfunzies/boulder/common"
 	"github.com/tpageforfunzies/boulder/models"
 )
 
-func ValidateRoute(route *models.Route) (map[string] interface{}, bool) {
+func ValidateRoute(route *models.Route) bool {
 
 	if route.Name == "" {
-		return u.Message(false, "your route needs a name brah"), false
+		return false
 	}
 
 	if route.Grade == "" {
-		return u.Message(false, "your route needs a grade my doodie"), false
+		return false
 	}
 
 	if route.UserId == 0 {
-		return u.Message(false, "User not recognized"), false
+		return false
 	}
 
-	return u.Message(true, "success"), true
+	return true
 }
 
-func CreateRoute(route *models.Route) (map[string] interface{}) {
+func CreateRoute(route *models.Route) bool {
 
-	check, ok := ValidateRoute(route)
+	ok := ValidateRoute(route)
 	if !ok {
-		return check
+		return false
 	}
 
-	GetDB().Create(route)
-
-	resp := u.Message(true, "success")
-	resp["route"] = route
-	return resp
+	return GetDB().Create(route).RowsAffected == 1
 }
 
-func UpdateRoute(route *models.Route) (map[string] interface{}) {
-	check, ok := ValidateRoute(route)
+func UpdateRoute(route *models.Route) bool {
+	ok := ValidateRoute(route)
 	if !ok {
-		return check
+		return false
 	}
 
-	GetDB().Model(&route).Updates(&route)
-
-	resp := u.Message(true, "success")
-	resp["route"] = route
-	return resp
+	return GetDB().Model(&route).Updates(&route).RowsAffected == 1
 }
 
 func DeleteRoute(id int) bool {
