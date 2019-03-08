@@ -6,7 +6,7 @@ import (
   "fmt"
   "github.com/tpageforfunzies/boulder"
   "github.com/tpageforfunzies/boulder/services"
-  "github.com/tpageforfunzies/boulder/middleware"
+  // "github.com/tpageforfunzies/boulder/middleware"
 )
 func main() {
   // Load up environmental variables
@@ -20,7 +20,7 @@ func main() {
 
   // Add the token auth to all routes except create user
   // and login
-  router.Use(middleware.JwtAuthentication)
+  // router.Use(middleware.JwtAuthentication)
 
   // Setup route group for the API
   api := router.Group("/v1/")

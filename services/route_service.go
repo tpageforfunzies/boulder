@@ -37,8 +37,20 @@ func CreateRoute(route *models.Route) (map[string] interface{}) {
 	return resp
 }
 
-func GetRoute(id int) (*models.Route) {
+func UpdateRoute(route *models.Route) (map[string] interface{}) {
+	check, ok := ValidateRoute(route)
+	if !ok {
+		return check
+	}
 
+	GetDB().Model(&route).Updates(&route)
+
+	resp := u.Message(true, "success")
+	resp["route"] = route
+	return resp
+}
+
+func GetRoute(id int) (*models.Route) {
 	route := &models.Route{}
 	err := GetDB().Table("routes").Where("id = ?", id).First(route).Error
 	if err != nil {
@@ -47,8 +59,16 @@ func GetRoute(id int) (*models.Route) {
 	return route
 }
 
-func GetRoutesByUserId(userId int) ([]*models.Route) {
+func GetAllRoutes() ([]*models.Route) {
+	routes := make([]*models.Route, 0)
+	err := GetDB().Find(&routes).Error
+	if err != nil {
+		return nil
+	}
+	return routes
+}
 
+func GetRoutesByUserId(userId int) ([]*models.Route) {
 	routes := make([]*models.Route, 0)
 	err := GetDB().Table("routes").Where("user_id = ?", userId).Find(&routes).Error
 	if err != nil {
