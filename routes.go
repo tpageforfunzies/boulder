@@ -35,4 +35,12 @@ func AddRoutes(group *gin.RouterGroup) {
 	group.DELETE("/route/:id", handlers.DeleteRoute)
 	group.GET("/routes/all/", handlers.GetRoutes)
 	group.GET("/routes/all/:user_id", handlers.GetRoutesForUser)
+
+	// Comment Routes
+	group.POST("/comment/new", handlers.CreateComment)
+	group.GET("/comment/:id", handlers.GetComment)
+	group.PUT("/comment/:id", handlers.UpdateComment)
+	group.DELETE("/comment/:id", handlers.DeleteComment)
+	group.GET("/comments/all/", handlers.GetComments)
+	group.GET("/comments/all/:user_id", handlers.GetCommentsForUser)
 }
