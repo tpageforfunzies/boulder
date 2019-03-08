@@ -51,7 +51,7 @@ func createDatabaseConnection() {
 	if err != nil {
 		log.Fatalf("Got error when connect database, the error is '%v'", err)
 	}
-	db.Debug().AutoMigrate(&models.User{}, &models.Route{})
+	db.Debug().AutoMigrate(&models.User{}, &models.Route{}, &models.Comment{})
 }
 
 // Return singleton database connection
