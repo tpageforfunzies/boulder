@@ -123,3 +123,23 @@ func GetRoutes(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 	return
 }
+
+func GetRouteComments (c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		return
+	}
+	
+	comments := services.GetCommentsByRouteId(id)
+	if comments == nil {
+		resp := u.Message(false, "couldn't routes for that route")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["comments"] = comments
+	c.JSON(http.StatusOK, resp)
+	return
+}

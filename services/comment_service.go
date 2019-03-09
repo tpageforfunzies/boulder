@@ -73,3 +73,14 @@ func GetCommentsByUserId(userId int) ([]*models.Comment) {
 
 	return comments
 }
+
+func GetCommentsByRouteId(id int) ([]*models.Comment) {
+	comments := make([]*models.Comment, 0)
+	err := GetDB().Table("comments").Where("route_id = ?", id).Find(&comments).Error
+
+	if err != nil {
+		return nil
+	}
+
+	return comments
+}
