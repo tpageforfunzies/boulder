@@ -29,7 +29,7 @@ func CreateComment(comment *models.Comment) bool {
 		return false
 	}
 
-	return true
+	return GetDB().Create(comment).RowsAffected == 1
 }
 
 func UpdateComment(comment *models.Comment) bool {
@@ -48,7 +48,7 @@ func DeleteComment(id int) bool {
 
 func GetComment(id int) (*models.Comment) {
 	comment := &models.Comment{}
-	err := GetDB().Table("Comments").Where("id = ?", id).First(comment).Error
+	err := GetDB().Table("comments").Where("id = ?", id).First(comment).Error
 	if err != nil {
 		return nil
 	}
@@ -66,7 +66,7 @@ func GetAllComments() ([]*models.Comment) {
 
 func GetCommentsByUserId(userId int) ([]*models.Comment) {
 	comments := make([]*models.Comment, 0)
-	err := GetDB().Table("Comments").Where("user_id = ?", userId).Find(&comments).Error
+	err := GetDB().Table("comments").Where("user_id = ?", userId).Find(&comments).Error
 	if err != nil {
 		return nil
 	}
