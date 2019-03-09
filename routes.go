@@ -30,6 +30,9 @@ func AddRoutes(group *gin.RouterGroup) {
 	// group.GET("/user/routes", )
 	// group.GET("/user/comments", )
 
+	//Users routes
+	group.GET("/users", handlers.GetUsers)
+
 	group.GET("/user/:id", handlers.GetUser)
 	group.GET("/user/:id/routes", handlers.GetUserRoutes)
 	group.GET("/user/:id/comments", handlers.GetUserComments)

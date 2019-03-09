@@ -112,5 +112,18 @@ func GetUser(c *gin.Context) {
 	resp["user"] = user
 	c.JSON(http.StatusOK, resp)
 	return
+}
 
+func GetUsers(c *gin.Context) {
+	users := services.GetAllUsers()
+	if len(users) == 0 {
+		resp := u.Message(false, "couldn't get all users")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["users"] = users
+	c.JSON(http.StatusOK, resp)
+	return
 }

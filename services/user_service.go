@@ -119,3 +119,12 @@ func GetUserById(id int) *models.User {
 	user.Password = ""
 	return user
 }
+
+func GetAllUsers() []*models.User {
+	users := make([]*models.User, 0)
+	err := GetDB().Table("users").Find(&users).Error
+	if err != nil {
+		return nil
+	}
+	return users
+}
