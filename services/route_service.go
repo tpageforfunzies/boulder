@@ -46,7 +46,7 @@ func DeleteRoute(id int) bool {
 	return damage == 1
 }
 
-func GetRoute(id int) (*models.Route) {
+func GetRouteById(id int) (*models.Route) {
 	route := &models.Route{}
 	err := GetDB().Table("routes").Where("id = ?", id).First(route).Error
 	if err != nil {

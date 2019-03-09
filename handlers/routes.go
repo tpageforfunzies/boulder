@@ -78,7 +78,7 @@ func GetRoute(c *gin.Context) {
 		return
 	}
 
-	route := services.GetRoute(id)
+	route := services.GetRouteById(id)
 	if route == nil {
 		resp := u.Message(false, "could not find route")
 		c.JSON(http.StatusNotFound, resp)

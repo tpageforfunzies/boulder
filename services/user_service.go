@@ -108,14 +108,14 @@ func Login(email, password string) (map[string]interface{}) {
 	return resp
 }
 
-func GetUser(u uint) *models.User {
-
-	usr := &models.User{}
-	GetDB().Table("users").Where("id = ?", u).First(usr)
-	if usr.Email == "" { //User not found
+func GetUserById(id int) *models.User {
+	user := &models.User{}
+	GetDB().Table("users").Where("id = ?", id).First(user)
+	if user.Email == "" { //User not found
 		return nil
 	}
 
-	usr.Password = ""
-	return usr
+	// Gorm will get the token out
+	user.Password = ""
+	return user
 }

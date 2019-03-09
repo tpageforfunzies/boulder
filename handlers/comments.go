@@ -90,25 +90,6 @@ func GetComment(c *gin.Context) {
 	return
 }
 
-func GetCommentsForUser(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("user_id"))
-	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "error in your request"))
-		return
-	}
-
-	comments := services.GetCommentsByUserId(id)
-	if len(comments) == 0 {
-		resp := u.Message(false, "could not find their comments")
-		c.JSON(http.StatusNotFound, resp)
-		return
-	}
-	resp := u.Message(true, "success")
-	resp["comments"] = comments
-	c.JSON(http.StatusOK, resp)
-	return
-}
-
 func GetComments(c *gin.Context) {
 	comments := services.GetAllComments()
 	if len(comments) == 0 {

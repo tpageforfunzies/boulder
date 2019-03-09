@@ -75,3 +75,42 @@ func GetUserRoutes(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 	return
 }
+
+func GetUserComments(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusNotFound, u.Message(false, "error in your request"))
+		return
+	}
+
+	comments := services.GetCommentsByUserId(id)
+	if len(comments) == 0 {
+		resp := u.Message(false, "could not find their comments")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+	resp := u.Message(true, "success")
+	resp["comments"] = comments
+	c.JSON(http.StatusOK, resp)
+	return
+}
+
+func GetUser(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		return
+	}
+
+	user := services.GetUserById(id)
+	if user == nil {
+		resp := u.Message(false, "could not find user")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+	resp := u.Message(true, "success")
+	resp["user"] = user
+	c.JSON(http.StatusOK, resp)
+	return
+
+}
