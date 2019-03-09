@@ -90,26 +90,6 @@ func GetRoute(c *gin.Context) {
 	return
 }
 
-func GetRoutesForUser(c *gin.Context) {
-
-	id, err := strconv.Atoi(c.Param("user_id"))
-	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "error in your request"))
-		return
-	}
-
-	routes := services.GetRoutesByUserId(id)
-	if len(routes) == 0 {
-		resp := u.Message(false, "could not find their routes")
-		c.JSON(http.StatusNotFound, resp)
-		return
-	}
-	resp := u.Message(true, "success")
-	resp["routes"] = routes
-	c.JSON(http.StatusOK, resp)
-	return
-}
-
 func GetRoutes(c *gin.Context) {
 	routes := services.GetAllRoutes()
 	if len(routes) == 0 {
@@ -130,10 +110,10 @@ func GetRouteComments (c *gin.Context) {
 		u.Respond(c.Writer, u.Message(false, "error in your request"))
 		return
 	}
-	
+
 	comments := services.GetCommentsByRouteId(id)
 	if comments == nil {
-		resp := u.Message(false, "couldn't routes for that route")
+		resp := u.Message(false, "couldn't comments for that route")
 		c.JSON(http.StatusNotFound, resp)
 		return
 	}

@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	// "fmt"
+	"strconv"
 )
 
 func HomeHandler(c *gin.Context) {
@@ -53,6 +53,25 @@ func Authenticate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+	c.JSON(http.StatusOK, resp)
+	return
+}
+
+func GetUserRoutes(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusNotFound, u.Message(false, "error in your request"))
+		return
+	}
+
+	routes := services.GetRoutesByUserId(id)
+	if len(routes) == 0 {
+		resp := u.Message(false, "could not find their routes")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+	resp := u.Message(true, "success")
+	resp["routes"] = routes
 	c.JSON(http.StatusOK, resp)
 	return
 }
