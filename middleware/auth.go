@@ -16,7 +16,15 @@ func JwtAuthentication(c *gin.Context) {
 	r := c.Request
 	w := c.Writer
 
-	notAuth := []string{"/v1/user/new", "/v1/user/login"}
+	openRoutes := []string{
+		"/v1/debug/log.html", 
+		"/v1/debug/js/log.js",
+		"/v1/logs/gin.log",
+		"/v1/user/new", 
+		"/v1/user/login",
+	}
+
+	notAuth := openRoutes
 	requestPath := r.URL.Path // current request path
 
 	// check if request does not need authentication, serve the request if it doesn't need it

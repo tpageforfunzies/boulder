@@ -6,6 +6,7 @@ import (
 	"github.com/tpageforfunzies/boulder/handlers"
 	"github.com/gin-gonic/gin"
 	"sync"
+	"net/http"
 )
 
 var router *gin.Engine
@@ -25,13 +26,14 @@ func AddApiRoutes(group *gin.RouterGroup) {
 	group.GET("/", handlers.HomeHandler)
 
 	// Static Content
-	group.Static("/content", "./content")
+	group.Static("/debug", "./debug")
+	// Serve the logs directory for the static page
+	// only the gin.log file specified open in auth middleware
+	group.StaticFS("/logs", http.Dir("./logs"))
 
 	// User routes
 	group.POST("/user/new", handlers.CreateUser)
 	group.POST("/user/login", handlers.Authenticate)
-	// group.GET("/user/routes", )
-	// group.GET("/user/comments", )
 
 	//Users routes
 	group.GET("/users", handlers.GetUsers)
