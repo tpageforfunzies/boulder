@@ -16,6 +16,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 type Config struct {
@@ -48,6 +49,11 @@ func SetLogger(config ...Config) gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
+		if strings.Contains(c.Request.URL.Path, "favicon") {
+			c.Next()
+			return
+		}
+
 		start := time.Now()
 		path := c.Request.URL.Path
 		raw := c.Request.URL.RawQuery
