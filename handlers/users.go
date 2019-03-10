@@ -18,7 +18,6 @@ func HomeHandler(c *gin.Context) {
 	)
 }
 
-
 func CreateUser(c *gin.Context) {
 
 	user := &models.User{}

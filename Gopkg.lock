@@ -11,14 +11,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4e65420ca90a2c87b051b44ac6583971d9d23f405c536a3e5323edc9f4a46f91"
-  name = "github.com/gin-contrib/logger"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "0b3d4131bf19ad686caa625663ac1797f8bbdc70"
-
-[[projects]]
-  branch = "master"
   digest = "1:44ff04468ffd7a0d0e690065cb330823ebea495bc9e5c8754b86021c2233025b"
   name = "github.com/gin-contrib/sse"
   packages = ["."]
@@ -178,7 +170,6 @@
   analyzer-version = 1
   input-imports = [
     "github.com/dgrijalva/jwt-go",
-    "github.com/gin-contrib/logger",
     "github.com/gin-gonic/gin",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",

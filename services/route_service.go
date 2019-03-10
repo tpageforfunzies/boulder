@@ -23,7 +23,6 @@ func ValidateRoute(route *models.Route) bool {
 }
 
 func CreateRoute(route *models.Route) bool {
-
 	ok := ValidateRoute(route)
 	if !ok {
 		return false

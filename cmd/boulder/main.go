@@ -19,12 +19,12 @@ func main() {
   // Set the router as the default one shipped with Gin
   router := boulder.GetRouter()
 
-  // Setup and add logger middleware to router
-  middleware.AddLogger(router)
-
-  // Add the token auth to all routes except create user and login
-  // router.Use(middleware.JwtAuthentication)
-
+  // Add log writers to router and 
+  // add logging and auth middleware
+  middleware.AddLogWriters(router)
+  router.Use(middleware.SetLogger())
+  router.Use(middleware.JwtAuthentication)
+  
   // Setup route group for the API
   api := router.Group("/v1/")
 

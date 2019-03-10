@@ -15,6 +15,7 @@ import (
 func CreateRoute(c *gin.Context) {
 	route := &models.Route{}
 	err := json.NewDecoder(c.Request.Body).Decode(route)
+	
 	if err != nil {
 		u.Respond(c.Writer, u.Message(false, string(err.Error())))
 		return

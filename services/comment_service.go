@@ -23,7 +23,6 @@ func ValidateComment(comment *models.Comment) bool {
 }
 
 func CreateComment(comment *models.Comment) bool {
-
 	ok := ValidateComment(comment)
 	if !ok {
 		return false
