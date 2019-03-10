@@ -21,3 +21,9 @@ _testmain.go
 app
 .env
 *.db
+
+# ignore my lame html pages
+content/*
+
+# ignore the log files
+*.log

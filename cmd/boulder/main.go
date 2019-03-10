@@ -8,6 +8,7 @@ import (
   "github.com/tpageforfunzies/boulder/services"
   "github.com/tpageforfunzies/boulder/middleware"
 )
+
 func main() {
   // Load up environmental variables
   services.LoadEnvironment()
@@ -18,14 +19,17 @@ func main() {
   // Set the router as the default one shipped with Gin
   router := boulder.GetRouter()
 
+  // Setup and add logger middleware to router
+  middleware.AddLogger(router)
+
   // Add the token auth to all routes except create user and login
-  router.Use(middleware.JwtAuthentication)
+  // router.Use(middleware.JwtAuthentication)
 
   // Setup route group for the API
   api := router.Group("/v1/")
 
   // Add routes to route group
-  boulder.AddRoutes(api)
+  boulder.AddApiRoutes(api)
 
   // Start and run the router
   err := router.Run(":80")

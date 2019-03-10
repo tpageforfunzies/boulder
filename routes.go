@@ -21,8 +21,11 @@ func GetRouter() *gin.Engine {
 	return router
 }
 
-func AddRoutes(group *gin.RouterGroup) {
+func AddApiRoutes(group *gin.RouterGroup) {
 	group.GET("/", handlers.HomeHandler)
+
+	// Static Content
+	group.Static("/content", "./content")
 
 	// User routes
 	group.POST("/user/new", handlers.CreateUser)
