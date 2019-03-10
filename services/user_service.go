@@ -110,7 +110,7 @@ func Login(email, password string) (map[string]interface{}) {
 
 func GetUserById(id int) *models.User {
 	user := &models.User{}
-	GetDB().Table("users").Where("id = ?", id).First(user)
+	user = FindById(user, id).(*models.User)
 	if user.Email == "" { //User not found
 		return nil
 	}

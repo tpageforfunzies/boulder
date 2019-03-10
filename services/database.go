@@ -11,6 +11,8 @@ import (
 	"github.com/tpageforfunzies/boulder/models"
 	"log"
 	"os"
+	"reflect"
+	"strings"
 )
 
 var db *gorm.DB
@@ -63,4 +65,34 @@ func GetDB() *gorm.DB {
 
 	createDatabaseConnection()
 	return db
+}
+
+func DeleteIt(object interface{}, id int) int64 {
+	return GetDB().Delete(object, id).RowsAffected
+}
+
+// thats the model and gets the string
+// name of it, pointer or not
+func getType(myvar interface{}) string {
+    if t := reflect.TypeOf(myvar); t.Kind() == reflect.Ptr {
+        return t.Elem().Name()
+    } else {
+        return t.Name()
+    }
+}
+
+// lowercases and "pluralizes" the model name into a table name
+func getTableName(object interface{}) string {
+	stringName := fmt.Sprintf("%ss", strings.ToLower(getType(object)))
+	return stringName
+}
+
+// takes a pointer to a model and an int id and fills the
+// model up and returns it
+func FindById(object interface{}, id int) interface{} {
+	err := GetDB().Table(getTableName(object)).Where("id = ?", id).First(object).Error
+	if err != nil {
+		return nil
+	}
+	return object
 }

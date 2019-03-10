@@ -41,17 +41,12 @@ func UpdateRoute(route *models.Route) bool {
 }
 
 func DeleteRoute(id int) bool {
-	damage := GetDB().Delete(&models.Route{}, id).RowsAffected
-	return damage == 1
+	return DeleteIt(&models.Route{}, id) == 1
 }
 
 func GetRouteById(id int) (*models.Route) {
 	route := &models.Route{}
-	err := GetDB().Table("routes").Where("id = ?", id).First(route).Error
-	if err != nil {
-		return nil
-	}
-	return route
+	return FindById(route, id).(*models.Route)
 }
 
 func GetAllRoutes() ([]*models.Route) {

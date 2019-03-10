@@ -41,17 +41,12 @@ func UpdateComment(comment *models.Comment) bool {
 }
 
 func DeleteComment(id int) bool {
-	damage := GetDB().Delete(&models.Comment{}, id).RowsAffected
-	return damage == 1
+	return DeleteIt(&models.Comment{}, id) == 1
 }
 
 func GetComment(id int) (*models.Comment) {
 	comment := &models.Comment{}
-	err := GetDB().Table("comments").Where("id = ?", id).First(comment).Error
-	if err != nil {
-		return nil
-	}
-	return comment
+	return FindById(comment, id).(*models.Comment)
 }
 
 func GetAllComments() ([]*models.Comment) {
