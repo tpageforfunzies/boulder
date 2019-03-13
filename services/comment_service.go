@@ -46,7 +46,7 @@ func DeleteComment(id int) bool {
 
 func GetCommentById(id int) (*models.Comment) {
 	comment := &models.Comment{}
-	return FindById(comment, id).(*models.Comment)
+	return FindSingleById(comment, id).(*models.Comment)
 }
 
 func GetAllComments() ([]*models.Comment) {

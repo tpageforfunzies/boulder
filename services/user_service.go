@@ -110,7 +110,7 @@ func Login(email, password string) (map[string]interface{}) {
 
 func GetUserById(id int) *models.User {
 	user := &models.User{}
-	user = FindById(user, id).(*models.User)
+	user = FindSingleById(user, id).(*models.User)
 	if user.Email == "" { //User not found
 		return nil
 	}
