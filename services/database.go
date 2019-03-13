@@ -67,10 +67,6 @@ func GetDB() *gorm.DB {
 	return db
 }
 
-func DeleteIt(object interface{}, id int) int64 {
-	return GetDB().Delete(object, id).RowsAffected
-}
-
 // takes the model and gets the string
 // name of it, pointer or not
 func getType(myvar interface{}) string {

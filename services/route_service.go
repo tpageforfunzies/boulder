@@ -41,7 +41,7 @@ func UpdateRoute(route *models.Route) bool {
 }
 
 func DeleteRoute(id int) bool {
-	return DeleteIt(&models.Route{}, id) == 1
+	return GetDB().Delete(&models.Route{}, id).RowsAffected == 1
 }
 
 func GetRouteById(id int) (*models.Route) {
@@ -60,10 +60,9 @@ func GetAllRoutes() ([]*models.Route) {
 
 func GetRoutesByUserId(userId int) ([]*models.Route) {
 	routes := make([]*models.Route, 0)
-	err := GetDB().Table("routes").Where("user_id = ?", userId).Find(&routes).Error
-	if err != nil {
-		return nil
-	}
-
+	 err := GetDB().Table("routes").Where("user_id = ?", userId).Find(&routes).Error
+       if err != nil {
+               return nil
+       }
 	return routes
 }

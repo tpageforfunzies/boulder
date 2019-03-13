@@ -78,7 +78,7 @@ func GetComment(c *gin.Context) {
 		return
 	}
 
-	comment := services.GetComment(id)
+	comment := services.GetCommentById(id)
 	if comment == nil {
 		resp := u.Message(false, "could not find comment")
 		c.JSON(http.StatusNotFound, resp)

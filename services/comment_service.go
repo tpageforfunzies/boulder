@@ -41,10 +41,10 @@ func UpdateComment(comment *models.Comment) bool {
 }
 
 func DeleteComment(id int) bool {
-	return DeleteIt(&models.Comment{}, id) == 1
+	return GetDB().Delete(&models.Comment{}, id).RowsAffected == 1
 }
 
-func GetComment(id int) (*models.Comment) {
+func GetCommentById(id int) (*models.Comment) {
 	comment := &models.Comment{}
 	return FindById(comment, id).(*models.Comment)
 }
@@ -64,17 +64,14 @@ func GetCommentsByUserId(userId int) ([]*models.Comment) {
 	if err != nil {
 		return nil
 	}
-
 	return comments
 }
 
 func GetCommentsByRouteId(id int) ([]*models.Comment) {
 	comments := make([]*models.Comment, 0)
 	err := GetDB().Table("comments").Where("route_id = ?", id).Find(&comments).Error
-
 	if err != nil {
 		return nil
 	}
-
 	return comments
 }
