@@ -46,7 +46,7 @@ func DeleteRoute(id int) bool {
 
 func GetRouteById(id int) (*models.Route) {
 	route := &models.Route{}
-	return FindById(route, id).(*models.Route)
+	return FindSingleById(route, id).(*models.Route)
 }
 
 func GetAllRoutes() ([]*models.Route) {

@@ -85,7 +85,7 @@ func getTableName(object interface{}) string {
 
 // takes a pointer to a model and an int id and fills the
 // model up and returns it
-func FindById(object interface{}, id int) interface{} {
+func FindSingleById(object interface{}, id int) interface{} {
 	err := GetDB().Table(getTableName(object)).Where("id = ?", id).First(object).Error
 	if err != nil {
 		return nil
