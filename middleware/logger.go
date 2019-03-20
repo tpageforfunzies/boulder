@@ -86,7 +86,24 @@ func SetLogger(config ...Config) gin.HandlerFunc {
 				end = end.UTC()
 			}
 
-			msg := fmt.Sprintf("Request Body: %s", reqBody)
+			// don't log the request bodies on these routes
+			privateRoutes := []string{
+				"/v1/user/new", 
+				"/v1/user/login",
+			}
+			notLog := privateRoutes
+			private := false
+			for _, value := range notLog {
+
+				if value == path {
+					private = true
+				}
+			}
+
+			var msg string
+			if !private {
+				msg = fmt.Sprintf("Request Body: %s", reqBody)
+			}
 			if len(c.Errors) > 0 {
 				msg = c.Errors.String()
 			}
