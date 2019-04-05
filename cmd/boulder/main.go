@@ -24,7 +24,7 @@ func main() {
   // add logging and auth middleware
   middleware.AddLogWriters(router)
   router.Use(middleware.SetLogger())
-  // router.Use(middleware.JwtAuthentication)
+  router.Use(middleware.JwtAuthentication)
 
   // Add CORS support, default for now
   config := cors.DefaultConfig()
