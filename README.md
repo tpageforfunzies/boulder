@@ -15,6 +15,7 @@ clone the repo into your go workspace, get into github.com/tpageforfunzies/bould
 
 
 you can also run it in a docker container now if you want, something like this'll do it
+<br>
 build image (this will move source and .env into container and build there so don't have to build locally if you dont want to)
 <br>
 `docker build -t boulderlinux .`
