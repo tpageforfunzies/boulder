@@ -1,4 +1,4 @@
 #!/bin/bash
 git pull
-make basic
+make build
 docker ps -a
