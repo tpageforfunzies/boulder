@@ -22,6 +22,7 @@ app
 app.*
 .env
 *.db
+deploy_key
 
 # ignore my lame html pages
 content/*
