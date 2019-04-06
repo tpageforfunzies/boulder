@@ -28,3 +28,4 @@ start the container
 <br>
 `docker start boulderapp`
 <br>
+of course now there's an even easier `dockerdeploy.sh` that does all that for you
