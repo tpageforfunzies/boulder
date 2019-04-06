@@ -17,4 +17,4 @@ jobs:
         - chmod 600 ./deploy_key
         - echo -e "Host $HOST\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
         - ssh-add ./deploy_key
-        - ssh -i ./deploy_key $DEPLOY_USER@$HOST pwd
+        - ssh -i ./deploy_key $DEPLOY_USER@$HOST cd $REPO_DIR && bash ./dockerdeploy.sh
