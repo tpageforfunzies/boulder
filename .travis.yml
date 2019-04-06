@@ -3,8 +3,18 @@ go:
 - 1.11.x
 env:
 - GO111MODULE=on
-script:
-- make build
-before_install:
-- openssl aes-256-cbc -K $encrypted_f7374039b671_key -iv $encrypted_f7374039b671_iv
-  -in deploy_key.enc -out ./deploy_key -d
+jobs:
+  include:
+    - stage: build
+      script: make build
+    - stage: deploy
+      if: branch = master
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_f7374039b671_key -iv $encrypted_f7374039b671_iv
+          -in deploy_key.enc -out ./deploy_key -d
+      script: 
+        - eval "$(ssh-agent -s)"
+        - chmod 600 ./deploy_key
+        - echo -e "Host $HOST\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+        - ssh-add ./deploy_key
+        - ssh -i ./deploy_key $DEPLOY_USER@$HOST pwd
