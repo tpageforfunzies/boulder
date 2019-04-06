@@ -15,4 +15,4 @@ build:
 basic:
 	go build -o app ./cmd/boulder
 	env GOOS=linux GOARCH=arm go build -o app.linux ./cmd/boulder
-	# sudo ./app
+	sudo ./app
