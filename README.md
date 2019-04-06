@@ -13,10 +13,11 @@ you'll need:
 
 clone the repo into your go workspace, get into github.com/tpageforfunzies/boulder/ and run `make setup` and then `make basic` and it'll install dependencies and spin up the local web server, visit `localhost:1337/v1/` and see the json response
 
-
-you can also run it in a docker container now if you want, something like this'll do it
+if you dont want to set up a go workspace and install go 
+(this will move source and .env into container and build there so don't have to build locally if you dont want to)
+you can also run it in a docker container, something like this'll do it
 <br>
-build image (this will move source and .env into container and build there so don't have to build locally if you dont want to)
+build image 
 <br>
 `docker build -t boulderlinux .`
 <br>
