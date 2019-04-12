@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func HomeHandler(c *gin.Context) {
@@ -47,7 +48,7 @@ func Authenticate(c *gin.Context) {
 		return
 	}
 
-	resp := services.Login(user.Email, user.Password)
+	resp := services.Login(strings.ToLower(user.Email), user.Password)
 	if !resp["status"].(bool) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
