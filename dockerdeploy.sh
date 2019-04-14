@@ -7,6 +7,6 @@ docker stop boulderapp && docker rm boulderapp
 docker build -t boulderlinux .
 # create new container
 # this could be a template file
-docker create -it --name boulderapp -p 8080:8080 boulderlinux:latest
+docker create -it --name boulderapp -p 8080:80 boulderlinux:latest
 # start that puppy up
 docker start boulderapp

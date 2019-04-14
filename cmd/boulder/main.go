@@ -38,7 +38,7 @@ func main() {
   boulder.AddApiRoutes(api)
 
   // Start and run the router
-  err := router.Run(":8080")
+  err := router.Run(":80")
 
   if err != nil {
     fmt.Println("something broke my dude")
