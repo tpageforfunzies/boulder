@@ -10,7 +10,6 @@ you'll need:
   * Dep
   * Make
 
-
 clone the repo into your go workspace, get into github.com/tpageforfunzies/boulder/ and run `make setup` and then `make basic` and it'll install dependencies and spin up the local web server, visit `localhost:1337/v1/` and see the json response
 
 if you dont want to set up a go workspace and install go 
@@ -30,3 +29,19 @@ start the container
 `docker start boulderapp`
 <br>
 of course now there's an even easier `dockerdeploy.sh` that does all that for you
+
+# Back End To Do:
+ * API
+ 	* Add pagination to V1 api
+ * Deployment
+ 	* Improve docker scripts (clean up better)
+ 	* Integrate Nginx RP repo to this repo and deployment
+ * Tech Debt
+ 	* Finish services refactor (User)
+ * Feature
+ 	* User Friends, Friend Feed
+ * Documentation
+ 	* Document SSL/Deployment
+ 	* Update swagger spec for HTTPS/WWW
+ * Testing
+ 	* Start
