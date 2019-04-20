@@ -36,10 +36,10 @@ of course now there's an even easier `dockerdeploy.sh` that does all that for yo
  * Deployment
  	* Improve docker scripts (clean up better)
  	* Integrate Nginx RP repo to this repo and deployment
- * Tech Debt
- 	* Finish services refactor (User)
  * Feature
  	* User Friends, Friend Feed
+ 	* Locations
+ 	* Images
  * Documentation
  	* Document SSL/Deployment
  	* Update swagger spec for HTTPS/WWW
