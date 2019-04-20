@@ -22,7 +22,6 @@ func CreateRoute(c *gin.Context) {
 		return
 	}
 
-	// route := &models.Route{}
 	ok, route := services.CreateRoute(route)
 	if !ok {
 		resp := u.Message(false, "could not create route")
