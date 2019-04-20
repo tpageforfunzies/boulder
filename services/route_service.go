@@ -22,13 +22,13 @@ func ValidateRoute(route *models.Route) bool {
 	return true
 }
 
-func CreateRoute(route *models.Route) bool {
+func CreateRoute(route *models.Route) (bool, *models.Route) {
 	ok := ValidateRoute(route)
 	if !ok {
-		return false
+		return false, route
 	}
 
-	return GetDB().Create(route).RowsAffected == 1
+	return GetDB().Create(route).RowsAffected == 1, route
 }
 
 func UpdateRoute(route *models.Route) bool {

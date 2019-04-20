@@ -17,11 +17,13 @@ func CreateRoute(c *gin.Context) {
 	err := json.NewDecoder(c.Request.Body).Decode(route)
 	
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, string(err.Error())))
+		resp := u.Message(false, string(err.Error()))
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
-	ok := services.CreateRoute(route)
+	// route := &models.Route{}
+	ok, route := services.CreateRoute(route)
 	if !ok {
 		resp := u.Message(false, "could not create route")
 		c.JSON(http.StatusNotFound, resp)
@@ -37,7 +39,8 @@ func UpdateRoute(c *gin.Context) {
 	route := &models.Route{}
 	err := json.NewDecoder(c.Request.Body).Decode(route)
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, string(err.Error())))
+		resp := u.Message(false, string(err.Error()))
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -56,7 +59,8 @@ func UpdateRoute(c *gin.Context) {
 func DeleteRoute(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		resp := u.Message(false, string(err.Error()))
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -75,7 +79,8 @@ func DeleteRoute(c *gin.Context) {
 func GetRoute(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		resp := u.Message(false, string(err.Error()))
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -108,7 +113,8 @@ func GetRoutes(c *gin.Context) {
 func GetRouteComments (c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		resp := u.Message(false, string(err.Error()))
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 

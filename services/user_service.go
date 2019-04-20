@@ -2,7 +2,6 @@
 package services
 
 import (
-    u "github.com/tpageforfunzies/boulder/common"
     "github.com/tpageforfunzies/boulder/models"
     "github.com/dgrijalva/jwt-go"
 	"strings"
@@ -13,15 +12,15 @@ import (
 
 //Validate incoming user details
 // Returns message, ok/success
-func ValidateUser(user *models.User) (map[string] interface{}, bool) {
+func ValidateUser(user *models.User) (string, bool) {
 
 	// basic format check
 	if !strings.Contains(user.Email, "@") {
-		return u.Message(false, "Email address is required"), false
+		return "Email address is required", false
 	}
 
 	if len(user.Password) < 6 {
-		return u.Message(false, "Cmon my doggie"), false
+		return "Cmon my doggie", false
 	}
 
 	// Set up an object just in case
@@ -30,39 +29,38 @@ func ValidateUser(user *models.User) (map[string] interface{}, bool) {
 	// see if they're already in there and if so, put in check
 	err := GetDB().Table("users").Where("email = ?", user.Email).First(check).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return u.Message(false, string(err.Error())), false
+		return "Error checking for email", false
 	}
 
 	if check.Email != "" {
-		return u.Message(false, "Someone is already using that email"), false
+		return "Someone is already using that email", false
 	}
 
 	// not already in db
-	return u.Message(false, "i believe you"), true
+	return "i believe you", true
 }
 
 // func UpdateUser(user *models.User) (map[string] interface{}) {
 	
 // }
 
-func CreateUser(user *models.User) (map[string] interface{}) {
+func CreateUser(user *models.User) (string, *models.User) {
 
 	// make sure they're not in db already
-	dupe, ok := ValidateUser(user)
+	validationResult, ok := ValidateUser(user)
 	if !ok {
-		return dupe
+		return validationResult, user
 	}
 
 	// hash the hell out of the password
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	user.Password = string(hashedPassword)
 
-	// ugh data mapper
 	GetDB().Create(user)
 
 	// should have an id now
 	if user.ID == 0 {
-		return u.Message(false, "don't have an ID")
+		return "don't have an ID", user
 	}
 
 	//make the token
@@ -73,26 +71,24 @@ func CreateUser(user *models.User) (map[string] interface{}) {
 
 	// get it up out of here
 	user.Password = ""
-
-	resp := u.Message(true, "User created!")
-	resp["user"] = user
-	return resp
+	
+	return "User created!", user
 }
 
-func Login(email, password string) (map[string]interface{}) {
+func Login(email, password string) (string, *models.User) {
 
 	user := &models.User{}
 	err := GetDB().Table("users").Where("email = ?", email).First(user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return u.Message(false, "Email address not found")
+			return "Email address not found", user
 		}
-		return u.Message(false, "Connection error. Please retry")
+		return "Connection error. Please retry", user
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword { //Password does not match
-		return u.Message(false, "Invalid login credentials. Please try again")
+		return "Invalid login credentials. Please try again", user
 	}
 	//Worked Logged In
 	user.Password = ""
@@ -103,9 +99,7 @@ func Login(email, password string) (map[string]interface{}) {
 	tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
 	user.Token = tokenString //Store the token in the response
 
-	resp := u.Message(true, "Logged In")
-	resp["user"] = user
-	return resp
+	return "Logged In", user
 }
 
 func GetUserById(id int) *models.User {

@@ -22,19 +22,24 @@ func HomeHandler(c *gin.Context) {
 func CreateUser(c *gin.Context) {
 
 	user := &models.User{}
-	// throw this bitch up in that object
 	err := json.NewDecoder(c.Request.Body).Decode(user)
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "went wrong in handler"))
+		resp := u.Message(false, "went wrong in handler")
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
-	resp := services.CreateUser(user)
+	result, user := services.CreateUser(user)
 
-	if !resp["status"].(bool) {
+	// make this less sketchy
+	if result != "User created!" {
+		resp := u.Message(false, result)
 		c.JSON(http.StatusForbidden, resp)
 		return
 	}
+
+	resp := u.Message(true, result)
+	resp["user"] = user
 	c.JSON(http.StatusOK, resp)
 	return
 }
@@ -44,15 +49,20 @@ func Authenticate(c *gin.Context) {
 	user := &models.User{}
 	err := json.NewDecoder(c.Request.Body).Decode(user)
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "went wrong in handler"))
-		return
-	}
-
-	resp := services.Login(strings.ToLower(user.Email), user.Password)
-	if !resp["status"].(bool) {
+		resp := u.Message(false, "went wrong in handler")
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+
+	result, user := services.Login(strings.ToLower(user.Email), user.Password)
+	if result != "Logged In" {
+		resp := u.Message(false, result)
+		c.JSON(http.StatusForbidden, resp)
+		return
+	}
+	
+	resp := u.Message(true, result)
+	resp["user"] = user
 	c.JSON(http.StatusOK, resp)
 	return
 }
@@ -60,7 +70,8 @@ func Authenticate(c *gin.Context) {
 func GetUserRoutes(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusNotFound, u.Message(false, "error in your request"))
+		resp := u.Message(false, "went wrong in handler")
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -79,7 +90,8 @@ func GetUserRoutes(c *gin.Context) {
 func GetUserComments(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusNotFound, u.Message(false, "error in your request"))
+		resp := u.Message(false, "went wrong in handler")
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
@@ -98,7 +110,8 @@ func GetUserComments(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		u.Respond(c.Writer, u.Message(false, "error in your request"))
+		resp := u.Message(false, "went wrong in handler")
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
