@@ -46,12 +46,17 @@ func DeleteRoute(id int) bool {
 
 func GetRouteById(id int) (*models.Route) {
 	route := &models.Route{}
-	return FindSingleById(route, id).(*models.Route)
+	err := GetDB().Table("routes").Preload("Comments").Find(route, id).Error
+	if err != nil {
+		return nil
+	}
+
+	return route
 }
 
 func GetAllRoutes() ([]*models.Route) {
 	routes := make([]*models.Route, 0)
-	err := GetDB().Find(&routes).Error
+	err := GetDB().Preload("Comments").Find(&routes).Error
 	if err != nil {
 		return nil
 	}
@@ -60,7 +65,7 @@ func GetAllRoutes() ([]*models.Route) {
 
 func GetRoutesByUserId(userId int) ([]*models.Route) {
 	routes := make([]*models.Route, 0)
-	 err := GetDB().Table("routes").Where("user_id = ?", userId).Find(&routes).Error
+	 err := GetDB().Table("routes").Where("user_id = ?", userId).Preload("Comments").Find(&routes).Error
        if err != nil {
                return nil
        }

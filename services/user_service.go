@@ -71,14 +71,14 @@ func CreateUser(user *models.User) (string, *models.User) {
 
 	// get it up out of here
 	user.Password = ""
-	
+
 	return "User created!", user
 }
 
 func Login(email, password string) (string, *models.User) {
 
 	user := &models.User{}
-	err := GetDB().Table("users").Where("email = ?", email).First(user).Error
+	err := GetDB().Table("users").Where("email = ?", email).Preload("Comments").Preload("Routes").First(user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return "Email address not found", user
@@ -104,7 +104,11 @@ func Login(email, password string) (string, *models.User) {
 
 func GetUserById(id int) *models.User {
 	user := &models.User{}
-	user = FindSingleById(user, id).(*models.User)
+	err := GetDB().Table("users").Preload("Comments").Preload("Routes").Find(user, id).Error
+	if err != nil {
+		return nil
+	}
+
 	if user.Email == "" { //User not found
 		return nil
 	}
@@ -116,7 +120,7 @@ func GetUserById(id int) *models.User {
 
 func GetAllUsers() []*models.User {
 	users := make([]*models.User, 0)
-	err := GetDB().Table("users").Find(&users).Error
+	err := GetDB().Table("users").Preload("Comments").Preload("Routes").Find(&users).Error
 	if err != nil {
 		return nil
 	}
