@@ -21,7 +21,7 @@ build image
 <br>
 create the container
 <br>
-`docker create -it --name boulderapp -p 80:80 boulderlinux:latest`
+`docker create -it --name boulderapp -p 8080:80 boulderlinux:latest`
 <br>
 start the container
 <br>
@@ -29,7 +29,7 @@ start the container
 <br>
 of course now there's an even easier `dockerdeploy.sh` that does all that for you
 <br>
-if in a docker container, docker will listen to `:8080` and forward to app at `:80` (this is for the https reverse proxy set up in production) otherwise the app itself will listen on `:80`
+if using the script to run boulder in a docker container, docker will listen to `:8080` and forward to app at `:80` (this is for the https reverse proxy set up in production) otherwise the app itself will listen on `:80`
 
 # Back End To Do:
  * API
