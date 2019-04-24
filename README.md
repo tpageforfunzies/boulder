@@ -10,7 +10,7 @@ you'll need:
   * Dep
   * Make
 
-clone the repo into your go workspace, get into github.com/tpageforfunzies/boulder/ and run `make setup` and then `make basic` and it'll install dependencies and spin up the local web server, visit `localhost:1337/v1/` and see the json response
+clone the repo into your go workspace, get into github.com/tpageforfunzies/boulder/ and run `make setup` and then `make basic` and it'll install dependencies and spin up the local web server, visit `localhost:80/v1/` and see the json response
 
 if you dont want to set up a go workspace and install go 
 you can also run it in a docker container (this will move source and .env into container and build there so don't have to build locally if you dont want to), something like this'll do it
@@ -28,6 +28,8 @@ start the container
 `docker start boulderapp`
 <br>
 of course now there's an even easier `dockerdeploy.sh` that does all that for you
+<br>
+if in a docker container, docker will listen to `:8080` and forward to app at `:80` (this is for the https reverse proxy set up in production) otherwise the app itself will listen on `:80`
 
 # Back End To Do:
  * API
