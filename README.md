@@ -31,6 +31,9 @@ of course now there's an even easier `dockerdeploy.sh` that does all that for yo
 <br>
 if using the script to run boulder in a docker container, docker will listen to `:8080` and forward to app at `:80` (this is for the https reverse proxy set up in production) otherwise the app itself will listen on `:80`
 
+# Swagger API Spec
+https://app.swaggerhub.com/apis/tpageforfunzies/BoulderTracker/1.1
+
 # Back End To Do:
  * API
  	* Add pagination to V1 api
