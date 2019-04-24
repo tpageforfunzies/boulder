@@ -46,6 +46,5 @@ https://app.swaggerhub.com/apis/tpageforfunzies/BoulderTracker/1.1
  	* Images
  * Documentation
  	* Document SSL/Deployment
- 	* Update swagger spec for HTTPS/WWW
  * Testing
  	* Start
