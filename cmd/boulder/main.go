@@ -7,7 +7,7 @@ import (
   "github.com/tpageforfunzies/boulder"
   "github.com/tpageforfunzies/boulder/services"
   "github.com/tpageforfunzies/boulder/middleware"
-  "github.com/gin-contrib/cors"
+  // "github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -27,9 +27,10 @@ func main() {
   router.Use(middleware.JwtAuthentication)
 
   // Add CORS support, default for now
-  config := cors.DefaultConfig()
-  config.AllowAllOrigins = true
-  router.Use(cors.New(config))
+  // config := cors.DefaultConfig()
+  // config.AllowAllOrigins = true
+  // router.Use(cors.New(config))
+  router.Use(middleware.CORS())
   
   // Setup route group for the API
   api := router.Group("/v1/")

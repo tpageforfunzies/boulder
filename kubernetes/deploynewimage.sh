@@ -1,4 +1,5 @@
 #!/bin/bash
+# call it with bash ./kubernetes/deploynewimage.sh X.XX to build, push and update the deployment
 if [ -z "$1" ]; then
     echo "gotta have a version number dog"
     exit 2
