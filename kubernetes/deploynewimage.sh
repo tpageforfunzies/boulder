@@ -4,8 +4,8 @@ if [ -z "$1" ]; then
     exit 2
 fi
 echo "======building image======"
-docker build -t tpageforfunzies/boulderarmhf:"$1" .
+docker build -t tpageforfunzies/boulderarmhf:v"$1" .
 echo "======pushing image======"
-docker push tpageforfunzies/boulderarmhf:"$1"
+docker push tpageforfunzies/boulderarmhf:v"$1"
 echo "======updating deployment to rollout new image======"
-kubectl --record deployment.apps/bouldertracker set image deployment.v1.apps/bouldertracker bouldertracker-api=tpageforfunzies/boulderarmhf:"$1"
+kubectl --record deployment.apps/bouldertracker set image deployment.v1.apps/bouldertracker bouldertracker-api=tpageforfunzies/boulderarmhf:v"$1"
