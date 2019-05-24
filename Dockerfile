@@ -1,4 +1,4 @@
-FROM iron/go:dev
+FROM golang
 
 RUN mkdir /app
 WORKDIR /app
