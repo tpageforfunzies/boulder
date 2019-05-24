@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: bouldertracker-api
-        image: tpageforfunzies/boulderlinux:armhf
+        image: tpageforfunzies/boulderarmhf:v1.1
         ports:
         - containerPort: 80
