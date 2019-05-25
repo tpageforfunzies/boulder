@@ -20,6 +20,8 @@ func main() {
   // Set the router as the default one shipped with Gin
   router := boulder.GetRouter()
 
+  router.Use(middleware.CORS())
+
   // Add log writers to router and 
   // add logging and auth middleware
   middleware.AddLogWriters(router)
@@ -30,7 +32,7 @@ func main() {
   // config := cors.DefaultConfig()
   // config.AllowAllOrigins = true
   // router.Use(cors.New(config))
-  router.Use(middleware.CORS())
+
   
   // Setup route group for the API
   api := router.Group("/v1/")
