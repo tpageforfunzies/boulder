@@ -51,6 +51,7 @@ func AddApiRoutes(group *gin.RouterGroup) {
 
 	// Routes routes
 	group.GET("/routes", handlers.GetRoutes)
+	group.GET("/routes/:count", handlers.GetRecentRoutes)
 
 	// Comment Routes
 	group.POST("/comment/new", handlers.CreateComment)

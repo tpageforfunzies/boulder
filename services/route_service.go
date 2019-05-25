@@ -65,9 +65,18 @@ func GetAllRoutes() ([]*models.Route) {
 
 func GetRoutesByUserId(userId int) ([]*models.Route) {
 	routes := make([]*models.Route, 0)
-	 err := GetDB().Table("routes").Where("user_id = ?", userId).Preload("Comments").Find(&routes).Error
-       if err != nil {
-               return nil
-       }
+	err := GetDB().Table("routes").Where("user_id = ?", userId).Preload("Comments").Find(&routes).Error
+	if err != nil {
+       return nil
+    }
 	return routes
+}
+
+func GetRecentRoutes(count int) ([]*models.Route) {
+	routes := make([]*models.Route, count)
+	err := GetDB().Table("routes").Order("created_at desc").Limit(count).Find(&routes).Error
+	if err != nil {
+       return nil
+    }
+    return routes
 }

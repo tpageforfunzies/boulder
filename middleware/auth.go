@@ -22,6 +22,7 @@ func JwtAuthentication(c *gin.Context) {
 		"/v1/logs/gin.log",
 		"/v1/user/new", 
 		"/v1/user/login",
+		"/v1/routes/10", // this is for the front page display
 	}
 
 	notAuth := openRoutes

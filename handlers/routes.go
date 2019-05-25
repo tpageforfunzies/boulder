@@ -109,6 +109,27 @@ func GetRoutes(c *gin.Context) {
 	return
 }
 
+func GetRecentRoutes(c *gin.Context) {
+	count, err := strconv.Atoi(c.Param("count"))
+	if err != nil {
+		resp := u.Message(false, string(err.Error()))
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	routes := services.GetRecentRoutes(count)
+	if len(routes) == 0 {
+		resp := u.Message(false, "couldn't get the recent routes")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["routes"] = routes
+	c.JSON(http.StatusOK, resp)
+	return
+}
+
 func GetRouteComments (c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
