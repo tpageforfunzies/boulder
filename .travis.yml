@@ -7,15 +7,17 @@ jobs:
   include:
     - stage: build
       script: make build
-    - stage: deploy
-      if: branch = master
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_f7374039b671_key -iv $encrypted_f7374039b671_iv
-          -in deploy_key.enc -out ./deploy_key -d
-      script: 
-        - eval "$(ssh-agent -s)"
-        - chmod 600 ./deploy_key
-        - echo -e "Host $HOST\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-        - ssh-add ./deploy_key
-        - ssh -p 73 -i ./deploy_key $DEPLOY_USER@$HOST "cd $REPO_DIR; git pull; bash ./kubernetes/deploynewimage.sh;"
+    # This is commented out as the api is currently deployed onto a self hosted
+    # bare metal k8s cluster.  If that changes, CD can be reactivated.
+    # - stage: deploy
+    #   if: branch = master
+    #   before_install:
+    #     - openssl aes-256-cbc -K $encrypted_f7374039b671_key -iv $encrypted_f7374039b671_iv
+    #       -in deploy_key.enc -out ./deploy_key -d
+    #   script:
+    #     - eval "$(ssh-agent -s)"
+    #     - chmod 600 ./deploy_key
+    #     - echo -e "Host $HOST\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    #     - ssh-add ./deploy_key
+    #     - ssh -p 73 -i ./deploy_key $DEPLOY_USER@$HOST "cd $REPO_DIR; git pull; bash ./kubernetes/deploynewimage.sh;"
 
