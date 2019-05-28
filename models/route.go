@@ -14,5 +14,7 @@ type Route struct {
 	DateSent time.Time `json:"date_sent"`
 	Type string `json:"type"`
 	LocationId int `json:"location_id"`
+	Rating int `json: "rating"`
+	Style string `json: "style"`
 	Comments []Comment
 }

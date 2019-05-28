@@ -4,6 +4,8 @@
 #     echo "gotta have a version number dog"
 #     exit 2
 # fi
+echo "======logging into docker repo======"
+docker login
 echo "======building image======"
 docker build -t tpageforfunzies/boulderarmhf:v1.2 .
 echo "======pushing image======"
