@@ -17,12 +17,18 @@ func JwtAuthentication(c *gin.Context) {
 	w := c.Writer
 
 	openRoutes := []string{
-		"/v1/debug/log.html", 
-		"/v1/debug/js/log.js",
-		"/v1/logs/gin.log",
+		// more filesystem stuff commented out
+		// while running on k8s
+		// "/v1/debug/log.html", 
+		// "/v1/debug/js/log.js",
+		// "/v1/logs/gin.log",
+
+		// cant auth on login/new user
 		"/v1/user/new", 
 		"/v1/user/login",
-		"/v1/routes/10", // this is for the front page display
+		
+		// this is for the front page display
+		"/v1/routes/10",
 	}
 
 	notAuth := openRoutes

@@ -40,10 +40,6 @@ func ValidateUser(user *models.User) (string, bool) {
 	return "i believe you", true
 }
 
-// func UpdateUser(user *models.User) (map[string] interface{}) {
-	
-// }
-
 func CreateUser(user *models.User) (string, *models.User) {
 
 	// make sure they're not in db already
@@ -75,7 +71,7 @@ func CreateUser(user *models.User) (string, *models.User) {
 	return "User created!", user
 }
 
-func Login(email, password string) (string, *models.User) {
+func Login(email string, password string) (string, *models.User) {
 
 	user := &models.User{}
 	err := GetDB().Table("users").Where("email = ?", email).Preload("Comments").Preload("Routes").First(user).Error
@@ -116,6 +112,13 @@ func GetUserById(id int) *models.User {
 	// Gorm will get the token out
 	user.Password = ""
 	return user
+}
+
+func UpdateUserProfilePic(id int, imageUrl string) (bool, string) {
+	db := GetDB()
+	user := GetUserById(id)
+	user.ImageUrl = imageUrl
+	return db.Save(&user).RowsAffected == 1, imageUrl
 }
 
 func GetAllUsers() []*models.User {

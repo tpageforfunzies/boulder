@@ -19,6 +19,7 @@ type User struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
 	Token string `json:"token" sql:"-"`
+	ImageUrl string `json: "image_url"`
 	Routes []Route
 	Comments []Comment
 }

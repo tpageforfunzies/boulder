@@ -6,7 +6,8 @@ import (
 	"github.com/tpageforfunzies/boulder/handlers"
 	"github.com/gin-gonic/gin"
 	"sync"
-	"net/http"
+	// commented out with log dir
+	// "net/http"
 )
 
 var router *gin.Engine
@@ -25,11 +26,15 @@ func GetRouter() *gin.Engine {
 func AddApiRoutes(group *gin.RouterGroup) {
 	group.GET("/", handlers.HomeHandler)
 
+	// disabling all this while running on kubernetes
+	// because os filesystem stuff sucks on k8s
+
 	// Static Content
-	group.Static("/debug", "./debug")
+	// group.Static("/debug", "./debug")
+
 	// Serve the logs directory for the static page
 	// only the gin.log file specified open in auth middleware
-	group.StaticFS("/logs", http.Dir("./logs"))
+	// group.StaticFS("/logs", http.Dir("./logs"))
 
 	// User routes
 	group.POST("/user/new", handlers.CreateUser)
@@ -41,6 +46,8 @@ func AddApiRoutes(group *gin.RouterGroup) {
 	group.GET("/user/:id", handlers.GetUser)
 	group.GET("/user/:id/routes", handlers.GetUserRoutes)
 	group.GET("/user/:id/comments", handlers.GetUserComments)
+	// hate this route, sprinkling a healthy bit of tech debt around
+	group.POST("/userpic/:id", handlers.AddProfilePic)
 
 	// Route routes
 	group.POST("/route/new", handlers.CreateRoute)

@@ -7,14 +7,10 @@ import (
 	"net/http"
 	"regexp"
 	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"fmt"
-	"bytes"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -61,11 +57,6 @@ func SetLogger(config ...Config) gin.HandlerFunc {
 			path = path + "?" + raw
 		}
 
-		buf := make([]byte, 1024)
-		num, _ := c.Request.Body.Read(buf)
-		reqBody := string(buf[0:num])
-		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer([]byte(reqBody)))
-
 		c.Next()
 		track := true
 
@@ -86,24 +77,7 @@ func SetLogger(config ...Config) gin.HandlerFunc {
 				end = end.UTC()
 			}
 
-			// don't log the request bodies on these routes
-			privateRoutes := []string{
-				"/v1/user/new", 
-				"/v1/user/login",
-			}
-			notLog := privateRoutes
-			private := false
-			for _, value := range notLog {
-
-				if value == path {
-					private = true
-				}
-			}
-
 			var msg string
-			if !private {
-				msg = fmt.Sprintf("Request Body: %s", reqBody)
-			}
 			if len(c.Errors) > 0 {
 				msg = c.Errors.String()
 			}
@@ -120,17 +94,14 @@ func SetLogger(config ...Config) gin.HandlerFunc {
 			switch {
 			case c.Writer.Status() >= http.StatusBadRequest && c.Writer.Status() < http.StatusInternalServerError:
 				{
-					dumplogger.Warn().
-						Msg(msg)
+					dumplogger.Warn().Msg(msg)
 				}
 			case c.Writer.Status() >= http.StatusInternalServerError:
 				{
-					dumplogger.Error().
-						Msg(msg)
+					dumplogger.Error().Msg(msg)
 				}
 			default:
-				dumplogger.Info().
-					Msg(msg)
+				dumplogger.Info().Msg(msg)
 			}
 		}
 
@@ -141,11 +112,13 @@ func AddLogWriters(r *gin.Engine) {
 	// Set default to debug for now
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 
-	f, _ := os.Create("logs/gin.log")
+	// disabling file system logging while running on kubernetes
+	// f, _ := os.Create("logs/gin.log")
 
 	log.Logger = log.Output(
 		zerolog.ConsoleWriter{
-			Out:     io.MultiWriter(f, os.Stdout),
+			// Out:     io.MultiWriter(f, os.Stdout),
+			Out:     io.MultiWriter(os.Stdout),
 			NoColor: true,
 		},
 	)

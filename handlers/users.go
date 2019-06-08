@@ -10,6 +10,9 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"fmt"
+	"io"
+    "mime"
 )
 
 func HomeHandler(c *gin.Context) {
@@ -42,6 +45,60 @@ func CreateUser(c *gin.Context) {
 	resp["user"] = user
 	c.JSON(http.StatusOK, resp)
 	return
+}
+
+// profile pic functionality right here baby
+// gets the post multipart form request from front end
+// and gets the id out of the context and goes through each
+// file one by one, uploads to s3, and updates user data with the 
+// new image url
+// does multiple so can have a gallery eventually
+func AddProfilePic(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		resp := u.Message(false, "need an id for user to update")
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+		
+	multipart, err := c.Request.MultipartReader()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	for {
+		mimePart, err := multipart.NextPart()
+		fmt.Println(mimePart)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Println(err.Error())
+			break
+		}
+		_, params, err := mime.ParseMediaType(mimePart.Header.Get("Content-Disposition"))
+		headers := c.Request.Header.Get("Content-Type")
+		if err != nil {
+			fmt.Println(err.Error())
+			break
+		}
+
+		// call the image service and upload the parsed file by the filename and type
+		ok, imageUrl := services.UploadProfilePicture(params["filename"], headers, mimePart)
+		if ok != true {
+			// woops if false, imageUrl is the error
+			fmt.Println("Errored in S3 service")
+			c.JSON(http.StatusInternalServerError, imageUrl)
+		}
+
+		// call the user service and update the ImageUrl for User :id with new public url
+		ok, _ = services.UpdateUserProfilePic(id, imageUrl)
+		if ok != true {
+			c.String(http.StatusInternalServerError, "couldn't update user")
+		}
+
+		c.String(http.StatusOK, imageUrl)
+	}
 }
 
 func Authenticate(c *gin.Context) {

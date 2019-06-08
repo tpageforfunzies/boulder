@@ -16,5 +16,6 @@ type Route struct {
 	LocationId int `json:"location_id"`
 	Rating int `json: "rating"`
 	Style string `json: "style"`
+	ImageUrl string `json: "image_url"`
 	Comments []Comment
 }
