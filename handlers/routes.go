@@ -73,7 +73,7 @@ func AddRoutePic(c *gin.Context) {
 			break
 		}
 
-		fileName := fmt.Sprintf("route%d", id)
+		fileName := fmt.Sprintf("route%d.jpeg", id)
 		// call the image service and upload the parsed file by the filename and type
 		ok, imageUrl := services.UploadPicture(fileName, headers, mimePart)
 		if !ok {
