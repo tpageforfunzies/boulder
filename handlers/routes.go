@@ -76,7 +76,7 @@ func AddRoutePic(c *gin.Context) {
 		fileName := fmt.Sprintf("route%d", id)
 		// call the image service and upload the parsed file by the filename and type
 		ok, imageUrl := services.UploadPicture(fileName, headers, mimePart)
-		if ok != true {
+		if !ok {
 			// woops if false, imageUrl is the error
 			fmt.Println("Errored in S3 service")
 			c.JSON(http.StatusInternalServerError, imageUrl)
@@ -84,7 +84,7 @@ func AddRoutePic(c *gin.Context) {
 
 		// call the route service and update the ImageUrl for route :id with new public url
 		ok, _ = services.UpdateRoutePic(id, imageUrl)
-		if ok != true {
+		if !ok {
 			c.String(http.StatusInternalServerError, "couldn't update route")
 		}
 
