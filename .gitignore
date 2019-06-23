@@ -23,6 +23,7 @@ app.*
 .env
 *.db
 deploy_key
+*.code-workspace
 
 # ignore my lame html pages
 content/*
