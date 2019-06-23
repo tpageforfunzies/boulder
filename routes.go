@@ -3,9 +3,10 @@
 package boulder
 
 import (
-	"github.com/tpageforfunzies/boulder/handlers"
-	"github.com/gin-gonic/gin"
 	"sync"
+
+	"github.com/gin-gonic/gin"
+	"github.com/tpageforfunzies/boulder/handlers"
 	// commented out with log dir
 	// "net/http"
 )
@@ -55,6 +56,8 @@ func AddApiRoutes(group *gin.RouterGroup) {
 	group.PUT("/route/:id", handlers.UpdateRoute)
 	group.DELETE("/route/:id", handlers.DeleteRoute)
 	group.GET("/route/:id/comments", handlers.GetRouteComments)
+	// hate this route, sprinkling a healthy bit of tech debt around
+	group.POST("/routepic/:id", handlers.AddRoutePic)
 
 	// Routes routes
 	group.GET("/routes", handlers.GetRoutes)
