@@ -2,20 +2,23 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"mime"
+	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
 	u "github.com/tpageforfunzies/boulder/common"
 	"github.com/tpageforfunzies/boulder/models"
 	"github.com/tpageforfunzies/boulder/services"
-	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
-
 
 func CreateRoute(c *gin.Context) {
 	route := &models.Route{}
 	err := json.NewDecoder(c.Request.Body).Decode(route)
-	
+
 	if err != nil {
 		resp := u.Message(false, string(err.Error()))
 		c.JSON(http.StatusBadRequest, resp)
@@ -32,6 +35,61 @@ func CreateRoute(c *gin.Context) {
 	resp["route"] = route
 	c.JSON(http.StatusOK, resp)
 	return
+}
+
+// route pic functionality right here baby
+// gets the post multipart form request from front end
+// and gets the id out of the context and goes through each
+// file one by one, uploads to s3, and updates route data with the
+// new image url
+// does multiple so can have a gallery eventually
+func AddRoutePic(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		resp := u.Message(false, "need an id for route to update")
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	multipart, err := c.Request.MultipartReader()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	for {
+		mimePart, err := multipart.NextPart()
+		fmt.Println(mimePart)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Println(err.Error())
+			break
+		}
+		_, _, err = mime.ParseMediaType(mimePart.Header.Get("Content-Disposition"))
+		headers := c.Request.Header.Get("Content-Type")
+		if err != nil {
+			fmt.Println(err.Error())
+			break
+		}
+
+		fileName := fmt.Sprintf("route%d", id)
+		// call the image service and upload the parsed file by the filename and type
+		ok, imageUrl := services.UploadPicture(fileName, headers, mimePart)
+		if ok != true {
+			// woops if false, imageUrl is the error
+			fmt.Println("Errored in S3 service")
+			c.JSON(http.StatusInternalServerError, imageUrl)
+		}
+
+		// call the route service and update the ImageUrl for route :id with new public url
+		ok, _ = services.UpdateRoutePic(id, imageUrl)
+		if ok != true {
+			c.String(http.StatusInternalServerError, "couldn't update route")
+		}
+
+		c.String(http.StatusOK, imageUrl)
+	}
 }
 
 func UpdateRoute(c *gin.Context) {
@@ -130,7 +188,7 @@ func GetRecentRoutes(c *gin.Context) {
 	return
 }
 
-func GetRouteComments (c *gin.Context) {
+func GetRouteComments(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		resp := u.Message(false, string(err.Error()))

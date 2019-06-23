@@ -2,23 +2,24 @@
 package handlers
 
 import (
-	u "github.com/tpageforfunzies/boulder/common"
-	"github.com/tpageforfunzies/boulder/models"
-	"github.com/tpageforfunzies/boulder/services"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"io"
+	"mime"
 	"net/http"
 	"strconv"
 	"strings"
-	"fmt"
-	"io"
-    "mime"
+
+	"github.com/gin-gonic/gin"
+	u "github.com/tpageforfunzies/boulder/common"
+	"github.com/tpageforfunzies/boulder/models"
+	"github.com/tpageforfunzies/boulder/services"
 )
 
 func HomeHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H {
-         "message": "derp",
-       },
+	c.JSON(http.StatusOK, gin.H{
+		"message": "derp",
+	},
 	)
 }
 
@@ -50,7 +51,7 @@ func CreateUser(c *gin.Context) {
 // profile pic functionality right here baby
 // gets the post multipart form request from front end
 // and gets the id out of the context and goes through each
-// file one by one, uploads to s3, and updates user data with the 
+// file one by one, uploads to s3, and updates user data with the
 // new image url
 // does multiple so can have a gallery eventually
 func AddProfilePic(c *gin.Context) {
@@ -60,7 +61,7 @@ func AddProfilePic(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-		
+
 	multipart, err := c.Request.MultipartReader()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -84,7 +85,7 @@ func AddProfilePic(c *gin.Context) {
 		}
 
 		// call the image service and upload the parsed file by the filename and type
-		ok, imageUrl := services.UploadProfilePicture(params["filename"], headers, mimePart)
+		ok, imageUrl := services.UploadPicture(params["filename"], headers, mimePart)
 		if ok != true {
 			// woops if false, imageUrl is the error
 			fmt.Println("Errored in S3 service")
@@ -117,7 +118,7 @@ func Authenticate(c *gin.Context) {
 		c.JSON(http.StatusForbidden, resp)
 		return
 	}
-	
+
 	resp := u.Message(true, result)
 	resp["user"] = user
 	c.JSON(http.StatusOK, resp)

@@ -44,7 +44,7 @@ func DeleteRoute(id int) bool {
 	return GetDB().Delete(&models.Route{}, id).RowsAffected == 1
 }
 
-func GetRouteById(id int) (*models.Route) {
+func GetRouteById(id int) *models.Route {
 	route := &models.Route{}
 	err := GetDB().Table("routes").Preload("Comments").Find(route, id).Error
 	if err != nil {
@@ -54,7 +54,7 @@ func GetRouteById(id int) (*models.Route) {
 	return route
 }
 
-func GetAllRoutes() ([]*models.Route) {
+func GetAllRoutes() []*models.Route {
 	routes := make([]*models.Route, 0)
 	err := GetDB().Preload("Comments").Find(&routes).Error
 	if err != nil {
@@ -63,20 +63,27 @@ func GetAllRoutes() ([]*models.Route) {
 	return routes
 }
 
-func GetRoutesByUserId(userId int) ([]*models.Route) {
+func GetRoutesByUserId(userId int) []*models.Route {
 	routes := make([]*models.Route, 0)
 	err := GetDB().Table("routes").Where("user_id = ?", userId).Preload("Comments").Find(&routes).Error
 	if err != nil {
-       return nil
-    }
+		return nil
+	}
 	return routes
 }
 
-func GetRecentRoutes(count int) ([]*models.Route) {
+func UpdateRoutePic(id int, imageUrl string) (bool, string) {
+	db := GetDB()
+	route := GetRouteById(id)
+	route.ImageUrl = imageUrl
+	return db.Save(&route).RowsAffected == 1, imageUrl
+}
+
+func GetRecentRoutes(count int) []*models.Route {
 	routes := make([]*models.Route, count)
 	err := GetDB().Table("routes").Order("created_at desc").Limit(count).Find(&routes).Error
 	if err != nil {
-       return nil
-    }
-    return routes
+		return nil
+	}
+	return routes
 }
