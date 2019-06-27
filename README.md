@@ -44,10 +44,10 @@ https://app.swaggerhub.com/apis/tpageforfunzies/BoulderTracker/1.1
  	 * Integrate Nginx RP repo to this repo and deployment
  * Feature
  	 * User Friends, Friend Feed
-   * Locations
- 	 * ~Images~
-   * ~Profile~
-   * ~Routes~
+ 	 * Locations
+   * ~Images~
+     * ~Profile~
+     * ~Routes~
    * ~Commenting~
  * Documentation
  	 * Document SSL/Deployment
