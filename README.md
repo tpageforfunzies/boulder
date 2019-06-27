@@ -36,15 +36,20 @@ https://app.swaggerhub.com/apis/tpageforfunzies/BoulderTracker/1.1
 
 # Back End To Do:
  * API
- 	* Add pagination to V1 api
+ 	 * ~Add pagination to V1 api~
+   * Statistics API
  * Deployment
- 	* Improve docker scripts (clean up better)
- 	* Integrate Nginx RP repo to this repo and deployment
+   * ~Improve docker scripts (clean up better)~
+   * ~Kubernetes Migration~
+ 	 * Integrate Nginx RP repo to this repo and deployment
  * Feature
- 	* User Friends, Friend Feed
- 	* Locations
- 	* Images
+ 	 * User Friends, Friend Feed
+   * Locations
+ 	 * ~Images~
+   * ~Profile~
+   * ~Routes~
+   * ~Commenting~
  * Documentation
- 	* Document SSL/Deployment
+ 	 * Document SSL/Deployment
  * Testing
- 	* Start
+ 	 * Start
