@@ -154,17 +154,44 @@ func GetRoute(c *gin.Context) {
 }
 
 func GetRoutes(c *gin.Context) {
-	routes := services.GetAllRoutes()
-	if len(routes) == 0 {
-		resp := u.Message(false, "couldn't get all routes")
-		c.JSON(http.StatusNotFound, resp)
+	countParam := c.DefaultQuery("count", "")
+	offsetParam := c.DefaultQuery("offset", "")
+	// if we have a param
+	if countParam != "" && offsetParam != "" {
+		count, err := strconv.Atoi(countParam)
+		offset, err := strconv.Atoi(offsetParam)
+		// if we couldn't decode either one
+		if err != nil {
+			resp := u.Message(false, "could not decode query parameter(s)")
+			fmt.Print(err.Error())
+			c.JSON(http.StatusInternalServerError, resp)
+		}
+		// grab {count} routes start at {offset}
+		routes := services.GetAllRoutes(count, offset)
+		// couldn't find 'em
+		if len(routes) == 0 {
+			resp := u.Message(false, "could not find routes")
+			c.JSON(http.StatusInternalServerError, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["routes"] = routes
+		c.JSON(http.StatusOK, resp)
+		return
+	} else {
+		// no count param
+		routes := services.GetAllRoutes(0, 0)
+		// couldn't find 'em
+		if len(routes) == 0 {
+			resp := u.Message(false, "could not find routes")
+			c.JSON(http.StatusInternalServerError, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["routes"] = routes
+		c.JSON(http.StatusOK, resp)
 		return
 	}
-
-	resp := u.Message(true, "success")
-	resp["routes"] = routes
-	c.JSON(http.StatusOK, resp)
-	return
 }
 
 func GetRecentRoutes(c *gin.Context) {

@@ -133,16 +133,45 @@ func GetUserRoutes(c *gin.Context) {
 		return
 	}
 
-	routes := services.GetRoutesByUserId(id)
-	if len(routes) == 0 {
-		resp := u.Message(false, "could not find their routes")
-		c.JSON(http.StatusNotFound, resp)
+	countParam := c.DefaultQuery("count", "")
+	offsetParam := c.DefaultQuery("offset", "")
+	// if we have a param
+	if countParam != "" && offsetParam != "" {
+		count, err := strconv.Atoi(countParam)
+		offset, err := strconv.Atoi(offsetParam)
+		// if we couldn't decode either one
+		if err != nil {
+			resp := u.Message(false, "could not decode query parameter(s)")
+			fmt.Print(err.Error())
+			c.JSON(http.StatusInternalServerError, resp)
+		}
+		// grab {count} routes start at {offset}
+		routes := services.GetRoutesByUserId(id, count, offset)
+		// couldn't find 'em
+		if len(routes) == 0 {
+			resp := u.Message(false, "could not find their routes")
+			c.JSON(http.StatusNotFound, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["routes"] = routes
+		c.JSON(http.StatusOK, resp)
+		return
+	} else {
+		// no count param
+		routes := services.GetRoutesByUserId(id, 0, 0)
+		// couldn't find 'em
+		if len(routes) == 0 {
+			resp := u.Message(false, "could not find their routes")
+			c.JSON(http.StatusNotFound, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["routes"] = routes
+		c.JSON(http.StatusOK, resp)
 		return
 	}
-	resp := u.Message(true, "success")
-	resp["routes"] = routes
-	c.JSON(http.StatusOK, resp)
-	return
+
 }
 
 func GetUserComments(c *gin.Context) {

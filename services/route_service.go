@@ -54,8 +54,15 @@ func GetRouteById(id int) *models.Route {
 	return route
 }
 
-func GetAllRoutes() []*models.Route {
+func GetAllRoutes(count int, offset int) []*models.Route {
 	routes := make([]*models.Route, 0)
+	if count != 0 && offset != 0 {
+		err := GetDB().Preload("Comments").Limit(count).Offset(offset).Order("created_at desc", true).Find(&routes).Error
+		if err != nil {
+			return nil
+		}
+		return routes
+	}
 	err := GetDB().Preload("Comments").Find(&routes).Error
 	if err != nil {
 		return nil
@@ -63,8 +70,15 @@ func GetAllRoutes() []*models.Route {
 	return routes
 }
 
-func GetRoutesByUserId(userId int) []*models.Route {
+func GetRoutesByUserId(userId int, count int, offset int) []*models.Route {
 	routes := make([]*models.Route, 0)
+	if count != 0 && offset != 0 {
+		err := GetDB().Table("routes").Where("user_id = ?", userId).Preload("Comments").Limit(count).Offset(offset).Order("created_at desc", true).Find(&routes).Error
+		if err != nil {
+			return nil
+		}
+		return routes
+	}
 	err := GetDB().Table("routes").Where("user_id = ?", userId).Preload("Comments").Find(&routes).Error
 	if err != nil {
 		return nil
