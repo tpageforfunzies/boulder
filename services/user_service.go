@@ -2,11 +2,12 @@
 package services
 
 import (
-    "github.com/tpageforfunzies/boulder/models"
-    "github.com/dgrijalva/jwt-go"
-	"strings"
-	"github.com/jinzhu/gorm"
 	"os"
+	"strings"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/jinzhu/gorm"
+	"github.com/tpageforfunzies/boulder/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -121,11 +122,24 @@ func UpdateUserProfilePic(id int, imageUrl string) (bool, string) {
 	return db.Save(&user).RowsAffected == 1, imageUrl
 }
 
-func GetAllUsers() []*models.User {
+func GetAllUsers(count int, offset int) []*models.User {
 	users := make([]*models.User, 0)
-	err := GetDB().Table("users").Preload("Comments").Preload("Routes").Find(&users).Error
+	if count != 0 {
+		err := GetDB().Table("users").Limit(count).Offset(offset).Order("created_at desc", true).Find(&users).Error
+		if err != nil {
+			return nil
+		}
+		return users
+	}
+
+	err := GetDB().Table("users").Find(&users).Error
 	if err != nil {
 		return nil
 	}
+
+	for _, user := range users {
+		user.Password = ""
+	}
+
 	return users
 }

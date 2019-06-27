@@ -44,21 +44,30 @@ func DeleteComment(id int) bool {
 	return GetDB().Delete(&models.Comment{}, id).RowsAffected == 1
 }
 
-func GetCommentById(id int) (*models.Comment) {
+func GetCommentById(id int) *models.Comment {
 	comment := &models.Comment{}
 	return FindSingleById(comment, id).(*models.Comment)
 }
 
-func GetAllComments() ([]*models.Comment) {
+func GetAllComments(count int, offset int) []*models.Comment {
 	comments := make([]*models.Comment, 0)
-	err := GetDB().Find(&comments).Error
+	if count != 0 {
+		err := GetDB().Table("comments").Limit(count).Offset(offset).Order("created_at desc", true).Find(&comments).Error
+		if err != nil {
+			return nil
+		}
+		return comments
+	}
+
+	err := GetDB().Table("comments").Find(&comments).Error
 	if err != nil {
 		return nil
 	}
+
 	return comments
 }
 
-func GetCommentsByUserId(userId int) ([]*models.Comment) {
+func GetCommentsByUserId(userId int) []*models.Comment {
 	comments := make([]*models.Comment, 0)
 	err := GetDB().Table("comments").Where("user_id = ?", userId).Find(&comments).Error
 	if err != nil {
@@ -67,7 +76,7 @@ func GetCommentsByUserId(userId int) ([]*models.Comment) {
 	return comments
 }
 
-func GetCommentsByRouteId(id int) ([]*models.Comment) {
+func GetCommentsByRouteId(id int) []*models.Comment {
 	comments := make([]*models.Comment, 0)
 	err := GetDB().Table("comments").Where("route_id = ?", id).Find(&comments).Error
 	if err != nil {

@@ -126,6 +126,7 @@ func Authenticate(c *gin.Context) {
 }
 
 func GetUserRoutes(c *gin.Context) {
+	// no/bad id? get 'em up outta here
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		resp := u.Message(false, "went wrong in handler")
@@ -135,32 +136,10 @@ func GetUserRoutes(c *gin.Context) {
 
 	countParam := c.DefaultQuery("count", "")
 	offsetParam := c.DefaultQuery("offset", "")
-	// if we have a param
-	if countParam != "" && offsetParam != "" {
-		count, err := strconv.Atoi(countParam)
-		offset, err := strconv.Atoi(offsetParam)
-		// if we couldn't decode either one
-		if err != nil {
-			resp := u.Message(false, "could not decode query parameter(s)")
-			fmt.Print(err.Error())
-			c.JSON(http.StatusInternalServerError, resp)
-		}
-		// grab {count} routes start at {offset}
-		routes := services.GetRoutesByUserId(id, count, offset)
-		// couldn't find 'em
-		if len(routes) == 0 {
-			resp := u.Message(false, "could not find their routes")
-			c.JSON(http.StatusNotFound, resp)
-			return
-		}
-		resp := u.Message(true, "success")
-		resp["routes"] = routes
-		c.JSON(http.StatusOK, resp)
-		return
-	} else {
-		// no count param
+
+	// if we don't have either param
+	if countParam == "" || offsetParam == "" {
 		routes := services.GetRoutesByUserId(id, 0, 0)
-		// couldn't find 'em
 		if len(routes) == 0 {
 			resp := u.Message(false, "could not find their routes")
 			c.JSON(http.StatusNotFound, resp)
@@ -171,6 +150,28 @@ func GetUserRoutes(c *gin.Context) {
 		c.JSON(http.StatusOK, resp)
 		return
 	}
+
+	// if we have both params decode them
+	count, err := strconv.Atoi(countParam)
+	offset, err := strconv.Atoi(offsetParam)
+	if err != nil {
+		resp := u.Message(false, "could not decode query parameter(s)")
+		fmt.Print(err.Error())
+		c.JSON(http.StatusInternalServerError, resp)
+	}
+
+	// grab {count} routes start at {offset} for {id}
+	routes := services.GetRoutesByUserId(id, count, offset)
+	if len(routes) == 0 {
+		resp := u.Message(false, "could not find their routes")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["routes"] = routes
+	c.JSON(http.StatusOK, resp)
+	return
 
 }
 
@@ -215,9 +216,36 @@ func GetUser(c *gin.Context) {
 }
 
 func GetUsers(c *gin.Context) {
-	users := services.GetAllUsers()
+	countParam := c.DefaultQuery("count", "")
+	offsetParam := c.DefaultQuery("offset", "")
+
+	// if we don't have either param
+	if countParam == "" || offsetParam == "" {
+		users := services.GetAllUsers(0, 0)
+		if len(users) == 0 {
+			resp := u.Message(false, "could not find the users")
+			c.JSON(http.StatusNotFound, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["users"] = users
+		c.JSON(http.StatusOK, resp)
+		return
+	}
+
+	// if we have both params decode them
+	count, err := strconv.Atoi(countParam)
+	offset, err := strconv.Atoi(offsetParam)
+	if err != nil {
+		resp := u.Message(false, "could not decode query parameter(s)")
+		fmt.Print(err.Error())
+		c.JSON(http.StatusInternalServerError, resp)
+	}
+
+	// grab {count} users start at {offset} for {id}
+	users := services.GetAllUsers(count, offset)
 	if len(users) == 0 {
-		resp := u.Message(false, "couldn't get all users")
+		resp := u.Message(false, "could not find the users")
 		c.JSON(http.StatusNotFound, resp)
 		return
 	}

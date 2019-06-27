@@ -2,15 +2,16 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
 	u "github.com/tpageforfunzies/boulder/common"
 	"github.com/tpageforfunzies/boulder/models"
 	"github.com/tpageforfunzies/boulder/services"
-	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
-
 
 func CreateComment(c *gin.Context) {
 	comment := &models.Comment{}
@@ -91,9 +92,37 @@ func GetComment(c *gin.Context) {
 }
 
 func GetComments(c *gin.Context) {
-	comments := services.GetAllComments()
+	countParam := c.DefaultQuery("count", "")
+	offsetParam := c.DefaultQuery("offset", "")
+
+	// if we don't have either param
+	if countParam == "" || offsetParam == "" {
+		comments := services.GetAllComments(0, 0)
+		if len(comments) == 0 {
+			resp := u.Message(false, "could not find the comments")
+			c.JSON(http.StatusNotFound, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["comments"] = comments
+		c.JSON(http.StatusOK, resp)
+		return
+	}
+
+	// if we have both params decode them
+	count, err := strconv.Atoi(countParam)
+	offset, err := strconv.Atoi(offsetParam)
+	if err != nil {
+		resp := u.Message(false, "could not decode query parameter(s)")
+		fmt.Print(err.Error())
+		c.JSON(http.StatusInternalServerError, resp)
+		return
+	}
+
+	// grab {count} comments start at {offset}
+	comments := services.GetAllComments(count, offset)
 	if len(comments) == 0 {
-		resp := u.Message(false, "couldn't get all comments")
+		resp := u.Message(false, "could not find the comments")
 		c.JSON(http.StatusNotFound, resp)
 		return
 	}
