@@ -7,6 +7,8 @@ jobs:
   include:
     - stage: build
       script: make build
+    - stage: test
+      script: make test
     # This is commented out as the api is currently deployed onto a self hosted
     # bare metal k8s cluster.  If that changes, CD can be reactivated.
     # - stage: deploy
