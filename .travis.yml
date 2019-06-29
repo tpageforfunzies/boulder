@@ -7,6 +7,15 @@ jobs:
   include:
     - stage: build
       script: make build
+    - stage: test
+      env:
+        global:
+          - secure: "VxcTE6b/XUFcLqJCfhPgL+wurPOAQ86q4mWcjxP0uN42ct4Orlx9DseN4GY9yk4MNgORoaIn3hDL2IYmNkTybeL7kgMVmIvpZKLUKLddJOfKlmZLr7YjmN/rYnPkxDHD+kzIyQ28Bf28y1jn1uGrurWsZFJB3dZKXvIKYorD0/Umr63p77mdDobKS99ubmr2sFB221iBuJiRCRsciXrlltuGYFEssxq6jYKlqrQByMFOUVtHHJcTpy4O2l10AMkKMJlGojnlEmLV3O2bjE/Bb9YH7sp7DiUV7amzoySWcVSHUVFi3tBr3np8L4MLDsGBocC3pVfL7m7+pPRMywtBE79FSWV0pssWcsrBTqVhaSQDQcsf6CPlcZ9gPy3SKwkDQhANOfioEfkLrAG3Qol10Y4NUyA5XPqWU2XsA0DddWwCMjmPSkxV8GUpsg3rgZCTOUxOQchisXjnfjeRqbNnz987dRyb68Dh3CguBpgbQtBWDC7MUAR0VsKtkvNLO0Ef/lGbVpig6d4EbhMNO0YOpYZCpANdTiaYOjMWXkp92JWKUUfnGzDRVO1PH5JwxvMjEbhjYmnKSG8AFrqMN0wCVbUgmQT6VrXF/xCTgDbmhAXv3lk0ekzYo4XaOEDQD47DLWtC2rmjwq88/hNMG4qb0BW4U6gBx7EQid/3tPNxMKI="
+      script: 
+        - go get golang.org/x/tools/cmd/cover
+        - go get github.com/mattn/goveralls
+        - go test -v ./... -covermode=count -coverprofile=coverage.out
+        - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN
     # This is commented out as the api is currently deployed onto a self hosted
     # bare metal k8s cluster.  If that changes, CD can be reactivated.
     # - stage: deploy

@@ -3,16 +3,19 @@ package services
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+
 	// don't turn this back on until you have gcc in your path
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/joho/godotenv"
-	"github.com/tpageforfunzies/boulder/models"
 	"log"
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/joho/godotenv"
+	"github.com/tpageforfunzies/boulder/models"
 )
 
 var db *gorm.DB
@@ -53,7 +56,7 @@ func createDatabaseConnection() {
 	if err != nil {
 		log.Fatalf("Got error when connect database, the error is '%v'", err)
 	}
-	db.Debug().AutoMigrate(&models.User{}, &models.Route{}, &models.Comment{}, &models.Location{})
+	db.Debug().AutoMigrate(&models.User{}, &models.Route{}, &models.Comment{}, &models.Location{}, &models.Relationship{})
 }
 
 // Return singleton database connection
@@ -70,11 +73,11 @@ func GetDB() *gorm.DB {
 // takes the model and gets the string
 // name of it, pointer or not
 func getType(myvar interface{}) string {
-    if t := reflect.TypeOf(myvar); t.Kind() == reflect.Ptr {
-        return t.Elem().Name()
-    } else {
-        return t.Name()
-    }
+	if t := reflect.TypeOf(myvar); t.Kind() == reflect.Ptr {
+		return t.Elem().Name()
+	} else {
+		return t.Name()
+	}
 }
 
 // lowercases and "pluralizes" the model name into a table name

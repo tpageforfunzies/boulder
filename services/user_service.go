@@ -101,7 +101,7 @@ func Login(email string, password string) (string, *models.User) {
 
 func GetUserById(id int) *models.User {
 	user := &models.User{}
-	err := GetDB().Table("users").Preload("Comments").Preload("Routes").Find(user, id).Error
+	err := GetDB().Table("users").Preload("Comments").Preload("Routes").Preload("Followed").Preload("Followers").Find(user, id).Error
 	if err != nil {
 		return nil
 	}

@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/tpageforfunzies/boulder.svg?branch=master)](https://travis-ci.org/tpageforfunzies/boulder)
 [![GolangCI](https://golangci.com/badges/github.com/golangci/golangci-lint.svg)](https://golangci.com)
+[![Coverage Status](https://coveralls.io/repos/github/tpageforfunzies/boulder/badge.svg?branch=master)](https://coveralls.io/github/tpageforfunzies/boulder?branch=master)
 
 # boulder 
 third iteration on the bouldertracker idea, this time will be a go service with separate web and mobile clients, this repo is for the Go web service and will be using the gin framework, probably with gorm for orm eventually and a database of some sort.  probably postgres
