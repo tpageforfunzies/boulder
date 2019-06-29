@@ -14,7 +14,7 @@ jobs:
       script: 
         - go get golang.org/x/tools/cmd/cover
         - go get github.com/mattn/goveralls
-        - go test -v -covermode=count -coverprofile=coverage.out
+        - go test -v ./... -covermode=count -coverprofile=coverage.out
         - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN
     # This is commented out as the api is currently deployed onto a self hosted
     # bare metal k8s cluster.  If that changes, CD can be reactivated.
