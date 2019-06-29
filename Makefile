@@ -6,6 +6,10 @@ else
 endif
 	dep ensure
 
+test:
+	# run all tests verbose
+	go test -v ./...
+
 build:
 	# macosx compile
 	go build -o app ./cmd/boulder
