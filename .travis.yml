@@ -5,8 +5,8 @@ env:
 - GO111MODULE=on
 jobs:
   include:
-    - stage: build
-      script: make build
+    # - stage: build
+    #   script: make build
     - stage: test
       env:
         global:
@@ -15,7 +15,7 @@ jobs:
         - go get golang.org/x/tools/cmd/cover
         - go get github.com/mattn/goveralls
         - go test -v -covermode=count -coverprofile=coverage.out
-        - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+        - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN
     # This is commented out as the api is currently deployed onto a self hosted
     # bare metal k8s cluster.  If that changes, CD can be reactivated.
     # - stage: deploy
