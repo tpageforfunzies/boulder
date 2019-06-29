@@ -8,7 +8,7 @@ endif
 
 test:
 	# run all tests verbose
-	go test -cover -v ./...
+	go test -cover ./...
 
 build:
 	# macosx compile
