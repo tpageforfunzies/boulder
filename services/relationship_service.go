@@ -47,6 +47,32 @@ func DeleteRelationship(id int) bool {
 	return GetDB().Delete(&models.Relationship{}, id).RowsAffected == 1
 }
 
+func GetRelationshipById(id int) *models.Relationship {
+	relationship := &models.Relationship{}
+	err := GetDB().Table("relationships").Find(relationship, id).Error
+	if err != nil {
+		return nil
+	}
+
+	return relationship
+}
+
+func GetAllRelationships(count int, offset int) []*models.Relationship {
+	relationships := make([]*models.Relationship, 0)
+	if count != 0 {
+		err := GetDB().Limit(count).Offset(offset).Order("created_at desc", true).Find(&relationships).Error
+		if err != nil {
+			return nil
+		}
+		return relationships
+	}
+	err := GetDB().Find(&relationships).Error
+	if err != nil {
+		return nil
+	}
+	return relationships
+}
+
 func getRelationshipsByUserId(userId int, relation string, count int, offset int) []*models.Relationship {
 	relationships := make([]*models.Relationship, 0)
 
