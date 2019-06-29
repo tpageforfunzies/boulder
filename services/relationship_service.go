@@ -4,8 +4,48 @@ package services
 import (
 	"fmt"
 
+	"github.com/jinzhu/gorm"
 	"github.com/tpageforfunzies/boulder/models"
 )
+
+func ValidateRelationship(relationship *models.Relationship) bool {
+
+	if relationship.FollowedID == 0 {
+		return false
+	}
+
+	if relationship.FollowerID == 0 {
+		return false
+	}
+
+	// Set up an object just in case
+	check := &models.Relationship{}
+
+	// see if it already exists and if so, put in check object
+	err := GetDB().Table("relationships").Where("follower_id = ? AND followed_id = ?", relationship.FollowerID, relationship.FollowedID).First(check).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false
+	}
+
+	if check.ID != 0 {
+		return false
+	}
+
+	return true
+}
+
+func CreateRelationship(relationship *models.Relationship) (bool, *models.Relationship) {
+	ok := ValidateRelationship(relationship)
+	if !ok {
+		return false, relationship
+	}
+
+	return GetDB().Create(relationship).RowsAffected == 1, relationship
+}
+
+func DeleteRelationship(id int) bool {
+	return GetDB().Delete(&models.Relationship{}, id).RowsAffected == 1
+}
 
 func getRelationshipsByUserId(userId int, relation string, count int, offset int) []*models.Relationship {
 	relationships := make([]*models.Relationship, 0)

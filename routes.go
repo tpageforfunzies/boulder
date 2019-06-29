@@ -71,8 +71,7 @@ func AddApiRoutes(group *gin.RouterGroup) {
 	// Comments Routes
 	group.GET("/comments", handlers.GetComments)
 
-	// TODO::::::::::::::::
 	// Relationship Routes
-	// group.POST("/relationship", handlers.CreateRelationship)
-	// group.DELETE("/relationship", handlers.DeleteRelationship)
+	group.POST("/relationship", handlers.CreateRelationship)
+	group.DELETE("/relationship/:id", handlers.DeleteRelationship)
 }
