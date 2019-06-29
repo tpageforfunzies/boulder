@@ -7,6 +7,6 @@ import (
 
 type Relationship struct {
 	gorm.Model
-	FollowerID int `json:"location_id"`
-	FollowedID int `json:"rating"`
+	FollowerID int `json:"follower_id"`
+	FollowedID int `json:"followed_id"`
 }

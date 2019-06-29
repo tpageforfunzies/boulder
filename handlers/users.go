@@ -1,4 +1,4 @@
-// auth.go
+// users.go
 package handlers
 
 import (
@@ -252,6 +252,102 @@ func GetUsers(c *gin.Context) {
 
 	resp := u.Message(true, "success")
 	resp["users"] = users
+	c.JSON(http.StatusOK, resp)
+	return
+}
+
+func GetUserFollowed(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		resp := u.Message(false, "went wrong in handler")
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	countParam := c.DefaultQuery("count", "")
+	offsetParam := c.DefaultQuery("offset", "")
+
+	// if we don't have either param
+	if countParam == "" || offsetParam == "" {
+		followed := services.GetFollowedByUserId(id, 0, 0)
+		if len(followed) == 0 {
+			resp := u.Message(false, "could not find the followed")
+			c.JSON(http.StatusNotFound, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["followed"] = followed
+		c.JSON(http.StatusOK, resp)
+		return
+	}
+
+	// if we have both params decode them
+	count, err := strconv.Atoi(countParam)
+	offset, err := strconv.Atoi(offsetParam)
+	if err != nil {
+		resp := u.Message(false, "could not decode query parameter(s)")
+		fmt.Print(err.Error())
+		c.JSON(http.StatusInternalServerError, resp)
+	}
+
+	// grab {count} users start at {offset} for {id}
+	followed := services.GetFollowedByUserId(id, count, offset)
+	if len(followed) == 0 {
+		resp := u.Message(false, "could not find the followed")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["followed"] = followed
+	c.JSON(http.StatusOK, resp)
+	return
+}
+
+func GetUserFollowers(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		resp := u.Message(false, "went wrong in handler")
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	countParam := c.DefaultQuery("count", "")
+	offsetParam := c.DefaultQuery("offset", "")
+
+	// if we don't have either param
+	if countParam == "" || offsetParam == "" {
+		followers := services.GetFollowersByUserId(id, 0, 0)
+		if len(followers) == 0 {
+			resp := u.Message(false, "could not find the followers")
+			c.JSON(http.StatusNotFound, resp)
+			return
+		}
+		resp := u.Message(true, "success")
+		resp["followers"] = followers
+		c.JSON(http.StatusOK, resp)
+		return
+	}
+
+	// if we have both params decode them
+	count, err := strconv.Atoi(countParam)
+	offset, err := strconv.Atoi(offsetParam)
+	if err != nil {
+		resp := u.Message(false, "could not decode query parameter(s)")
+		fmt.Print(err.Error())
+		c.JSON(http.StatusInternalServerError, resp)
+	}
+
+	// grab {count} users start at {offset} for {id}
+	followers := services.GetFollowersByUserId(id, count, offset)
+	if len(followers) == 0 {
+		resp := u.Message(false, "could not find the followers")
+		c.JSON(http.StatusNotFound, resp)
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["followers"] = followers
 	c.JSON(http.StatusOK, resp)
 	return
 }
