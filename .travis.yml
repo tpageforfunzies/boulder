@@ -5,8 +5,8 @@ env:
 - GO111MODULE=on
 jobs:
   include:
-    # - stage: build
-    #   script: make build
+    - stage: build
+      script: make build
     - stage: test
       env:
         global:
